@@ -13,7 +13,7 @@ public String consulta(String codigoCliente, String codigoRastreio){
 		plugin.setTerminalAlias(codigoCliente);
 		plugin.setTransactionType("TranPortal");
 		plugin.setVersion("1");
-		//plugin.set("transid" , "4144527330952661");
+		//plugin.set("tran sid" , "4144527330952661");
 		plugin.set("trackid" , codigoRastreio);
 		plugin.set("action" , "8");
 		plugin.set("type" , "");
