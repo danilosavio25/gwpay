@@ -1,21 +1,24 @@
 package br.com.gwpay.pagamento.service;
 
+import br.com.gwpay.pagamento.model.Parametros;
+import br.com.gwpay.pagamento.model.ParametrosAutorizacao;
 import br.com.gwpay.pagamento.plugin.MPIPlugin;
 
 public class GetNetService implements IPagamentoWS{
 
 	@Override
-	public String realizarCredito() {
+	public String realizarCredito(Parametros params) {
 		return null;
 	}
 
 	@Override
-	public String realizarCreditoAutorizacao() {
-		return null;
+	public String realizarCreditoAutorizacao(ParametrosAutorizacao params) {
+		MPIPlugin plugin = new MPIPlugin();
+		return plugin.realizarCreditoAutorizacao(params);
 	}
 
 	@Override
-	public String realizarCreditoConfirmacao() {
+	public String realizarCreditoConfirmacao(Parametros params) {
 		return null;
 	}
 
@@ -25,9 +28,8 @@ public class GetNetService implements IPagamentoWS{
 	}
 
 	@Override
-	public String realizarConsultaTransacao(String codigoCliente,String codigoRastreio) {
-		MPIPlugin plugin = new MPIPlugin();
-		return plugin.consulta(codigoCliente, codigoRastreio);
+	public String realizarConsultaTransacao(Parametros params) {
+		return null;
 	}
 
 	@Override
