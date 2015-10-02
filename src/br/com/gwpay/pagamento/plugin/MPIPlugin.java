@@ -1,5 +1,7 @@
 package br.com.gwpay.pagamento.plugin;
 
+import java.util.HashMap;
+
 import com.aciworldwide.commerce.gateway.plugins.UniversalPlugin;
 
 import br.com.gwpay.pagamento.model.Parametros;
@@ -47,7 +49,7 @@ public class MPIPlugin {
 	//	plugin.cancelamento();
 	}
 	
-	public String realizarCreditoAutorizacao(ParametrosAutorizacao params){
+	public HashMap realizarCreditoAutorizacao(ParametrosAutorizacao params){
 		
 		UniversalPlugin plugin = new UniversalPlugin();
 		
@@ -69,25 +71,41 @@ public class MPIPlugin {
 		plugin.set("instType" , params.getTipoParcelamento());
 		plugin.set("instNum" , params.getNumParcelas() + "");
 		
+		
+		HashMap camposRetorno = new HashMap<String, String>();
+		
 		if(!plugin.performTransaction()){
 			System.out.println( "Erro : " + plugin.getErrorText() );
+			camposRetorno.put("error_code", "erroPerform");
+			camposRetorno.put("error_text", plugin.getErrorText());
+			return camposRetorno;
 		}else{
 			String error_code = plugin.get("error_code_tag");
 			String error_text = plugin.get("error_text");
 			if(error_code != null && error_code.length() > 0 ){
 				System.out.println( "Código Erro : " + error_code );
 				System.out.println( "Mensagem : " + error_text );
+				camposRetorno.put("error_code", error_code);
+				camposRetorno.put("error_text", error_text);
+				return camposRetorno;
+				
 			} else{
 				System.out.println( "Código Resposta : " + plugin.get("result") );
 				System.out.println( "Resposta : " + plugin.get("responsecode"));
 				System.out.println( "tranid : " + plugin.get("tranid"));
 				System.out.println(plugin.getResponseFields());
 				
-				return plugin.get("tranid");
+				camposRetorno.put("result", plugin.get("result"));
+				camposRetorno.put("responsecode", plugin.get("responsecode"));
+				camposRetorno.put("tranid", plugin.get("tranid"));
+				camposRetorno.put("trackid", plugin.get("trackid"));
+				camposRetorno.put("postdate", plugin.get("postdate"));
+				
+				return camposRetorno;
+				
 			}
 		}
 		
-		return null;
 	}
 	
 	
