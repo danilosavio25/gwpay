@@ -16,9 +16,9 @@ public class ParametrosAutorizacao extends Parametros {
 	@XmlElement(required=true)
 	private String nomePortador;
 	@XmlElement(required=true)
-	private String mesVencimento;
+	private int mesVencimento;
 	@XmlElement(required=true)
-	private String anoVencimento;
+	private int anoVencimento;
 	@XmlElement(required=true)
 	private String codSegurancaCartao;
 	
@@ -44,28 +44,28 @@ public class ParametrosAutorizacao extends Parametros {
 
 
 
-	public String getAnoVencimento() {
+	public int getAnoVencimento() {
 		return anoVencimento;
 	}
 
 
 
 
-	public void setAnoVencimento(String anoVencimento) {
+	public void setAnoVencimento(int anoVencimento) {
 		this.anoVencimento = anoVencimento;
 	}
 
 
 
 
-	public String getMesVencimento() {
+	public int getMesVencimento() {
 		return mesVencimento;
 	}
 
 
 
 
-	public void setMesVencimento(String mesVencimento) {
+	public void setMesVencimento(int mesVencimento) {
 		this.mesVencimento = mesVencimento;
 	}
 

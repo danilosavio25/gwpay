@@ -31,11 +31,11 @@ public class MPIPlugin {
 			String error_code = plugin.get("error_code_tag");
 			String error_text = plugin.get("error_text");
 			if(error_code != null && error_code.length() > 0 ){
-				System.out.println( "Código Erro Conf: " + error_code );
+				System.out.println( "Cï¿½digo Erro Conf: " + error_code );
 				System.out.println( "Mensagem Conf: " + error_text );
-				return "Código Erro : " + error_code +  " Mensagem : " + error_text;
+				return "Cï¿½digo Erro : " + error_code +  " Mensagem : " + error_text;
 			} else{
-				System.out.println( "Código Resposta Conf: " + plugin.get("result") );
+				System.out.println( "Cï¿½digo Resposta Conf: " + plugin.get("result") );
 				System.out.println( "Resposta Conf: " + plugin.get("responsecode"));
 				System.out.println("GetFields Conf: " + plugin.getResponseFields());
 				return plugin.get("tranid");
@@ -59,8 +59,8 @@ public class MPIPlugin {
 		plugin.setVersion("1");
 		plugin.set("card" , params.getNumCartao());
 		plugin.set("cvv2" , params.getCodSegurancaCartao());
-		plugin.set("expyear" , params.getAnoVencimento());
-		plugin.set("expmonth" , params.getMesVencimento());
+		plugin.set("expyear" , params.getAnoVencimento() + "");
+		plugin.set("expmonth" , params.getMesVencimento() + "");
 		plugin.set("action" , "4");
 		plugin.set("type" , "CC");
 		plugin.set("transid" , "");
@@ -83,14 +83,14 @@ public class MPIPlugin {
 			String error_code = plugin.get("error_code_tag");
 			String error_text = plugin.get("error_text");
 			if(error_code != null && error_code.length() > 0 ){
-				System.out.println( "Código Erro : " + error_code );
+				System.out.println( "CodigoErro : " + error_code );
 				System.out.println( "Mensagem : " + error_text );
 				camposRetorno.put("error_code", error_code);
 				camposRetorno.put("error_text", error_text);
 				return camposRetorno;
 				
 			} else{
-				System.out.println( "Código Resposta : " + plugin.get("result") );
+				System.out.println( "Codigo Resposta : " + plugin.get("result") );
 				System.out.println( "Resposta : " + plugin.get("responsecode"));
 				System.out.println( "tranid : " + plugin.get("tranid"));
 				System.out.println(plugin.getResponseFields());
@@ -132,10 +132,10 @@ public class MPIPlugin {
 			String error_code = plugin.get("error_code_tag");
 			String error_text = plugin.get("error_text");
 			if(error_code != null && error_code.length() > 0 ){
-				System.out.println( "Código Erro Conf: " + error_code );
+				System.out.println( "Cï¿½digo Erro Conf: " + error_code );
 				System.out.println( "Mensagem Conf: " + error_text );
 			} else{
-				System.out.println( "Código Resposta Conf: " + plugin.get("result") );
+				System.out.println( "Cï¿½digo Resposta Conf: " + plugin.get("result") );
 				System.out.println( "Resposta Conf: " + plugin.get("responsecode"));
 				System.out.println("GetFields Conf: " + plugin.getResponseFields());
 
@@ -166,10 +166,10 @@ public class MPIPlugin {
 			String error_code = plugin.get("error_code_tag");
 			String error_text = plugin.get("error_text");
 			if(error_code != null && error_code.length() > 0 ){
-				System.out.println( "Código Erro Conf: " + error_code );
+				System.out.println( "Cï¿½digo Erro Conf: " + error_code );
 				System.out.println( "Mensagem Conf: " + error_text );
 			} else{
-				System.out.println( "Código Resposta Conf: " + plugin.get("result") );
+				System.out.println( "Cï¿½digo Resposta Conf: " + plugin.get("result") );
 				System.out.println( "Resposta Conf: " + plugin.get("responsecode"));
 				System.out.println("GetFields Conf: " + plugin.getResponseFields());
 
@@ -200,10 +200,10 @@ public class MPIPlugin {
 			String error_code = plugin.get("error_code_tag");
 			String error_text = plugin.get("error_text");
 			if(error_code != null && error_code.length() > 0 ){
-				System.out.println( "Código Erro Conf: " + error_code );
+				System.out.println( "Cï¿½digo Erro Conf: " + error_code );
 				System.out.println( "Mensagem Conf: " + error_text );
 			} else{
-				System.out.println( "Código Resposta Conf: " + plugin.get("result") );
+				System.out.println( "Cï¿½digo Resposta Conf: " + plugin.get("result") );
 				System.out.println( "Resposta Conf: " + plugin.get("responsecode"));
 				System.out.println("GetFields Conf: " + plugin.getResponseFields());
 
@@ -231,10 +231,10 @@ public class MPIPlugin {
 			String error_code = plugin.get("error_code_tag");
 			String error_text = plugin.get("error_text");
 			if(error_code != null && error_code.length() > 0 ){
-				System.out.println( "Código Erro Conf: " + error_code );
+				System.out.println( "Cï¿½digo Erro Conf: " + error_code );
 				System.out.println( "Mensagem Conf: " + error_text );
 			} else{
-				System.out.println( "Código Resposta Conf: " + plugin.get("result") );
+				System.out.println( "Cï¿½digo Resposta Conf: " + plugin.get("result") );
 				System.out.println( "Resposta Conf: " + plugin.get("responsecode"));
 				System.out.println("GetFields Conf: " + plugin.getResponseFields());
 
@@ -253,16 +253,16 @@ public class MPIPlugin {
 			String error_code = plugin.get("error_code_tag");
 			String error_text = plugin.get("error_text");
 			if(error_code != null && error_code.length() > 0 ){
-				System.out.println( "Código Erro : " + error_code );
+				System.out.println( "Cï¿½digo Erro : " + error_code );
 				System.out.println( "Mensagem : " + error_text );
 				
-				//return "Código Erro : " + error_code +  " Mensagem : " + error_text;
+				//return "Cï¿½digo Erro : " + error_code +  " Mensagem : " + error_text;
 				HashMap camposRetorno = new HashMap<String, String>();
 				camposRetorno.put("error_code", error_code);
 				camposRetorno.put("error_text", error_text);
 				return camposRetorno;
 			}  else{
-				System.out.println( "Código Resposta : " + plugin.get("result") );
+				System.out.println( "Cï¿½digo Resposta : " + plugin.get("result") );
 				System.out.println( "Resposta : " + plugin.get("responsecode"));
 				System.out.println(plugin.getResponseFields());
 				HashMap camposRetorno = new HashMap<String, String>();

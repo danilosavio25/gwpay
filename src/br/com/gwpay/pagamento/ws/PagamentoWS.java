@@ -41,14 +41,14 @@ public class PagamentoWS {
 		}*/
 		
 		
-		params.setCodCliente("D087729102");
+		/*params.setCodCliente("D087729102");
 		params.setBandeira("Master");
 		params.setNumCartao("5453010000083303");
 		params.setCodSegurancaCartao("321");
 		params.setNomePortador("ANTONIO NUNES SILVA");
 		params.setAnoVencimento("2017");
 		params.setMesVencimento("04");
-		params.setValor(100.00);
+		params.setValor(100.00);*/
 		
 		return service.realizarCreditoAutorizacao(params);
 	}
