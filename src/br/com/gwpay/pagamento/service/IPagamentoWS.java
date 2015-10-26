@@ -8,7 +8,7 @@ import br.com.gwpay.pagamento.model.ResultadoWS;
 
 public interface IPagamentoWS {
 	
-	public String realizarCredito(Parametros params) throws AdquirenteException, GWPayException;
+	public String realizarCreditoCompleto(ParametrosAutorizacao params) throws AdquirenteException, GWPayException;
 	
 	public ResultadoWS realizarCreditoAutorizacao(ParametrosAutorizacao params) throws AdquirenteException, GWPayException;
 	
@@ -20,6 +20,6 @@ public interface IPagamentoWS {
 	
 	public String realizarConsultaTransacao(Parametros params) throws AdquirenteException, GWPayException;
 	
-	public String realizarEstorno();
+	public String realizarCancelamento();
 	
 }

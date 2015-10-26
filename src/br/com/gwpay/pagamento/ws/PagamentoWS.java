@@ -22,14 +22,14 @@ import br.com.gwpay.pagamento.service.IPagamentoWS;
 @SOAPBinding(style=Style.DOCUMENT, use=Use.LITERAL, parameterStyle=ParameterStyle.WRAPPED)
 public class PagamentoWS {
 	
-	//Credito autenticado. Nova fun��o.
 	
-	@WebMethod(operationName="credito")
+	
+	@WebMethod(operationName="creditoCompleto")
 	@WebResult(name="resultadoWS")
 	public String realizarCredito() throws AdquirenteException, GWPayException{
 		IPagamentoWS service = new GetNetService();
-		Parametros params = new Parametros();
-		return service.realizarCredito(params);
+		ParametrosAutorizacao params = new ParametrosAutorizacao();
+		return service.realizarCreditoCompleto(params);
 	}
 	
 	@WebMethod(operationName="creditoAutorizacao")
@@ -60,10 +60,7 @@ public class PagamentoWS {
 	@WebResult(name="resultadoWS")
 	public String realizarCreditoConfirmacao() throws AdquirenteException, GWPayException{
 		IPagamentoWS service = new GetNetService();
-		
 		Parametros params = new Parametros();
-
-		
 		return service.realizarCreditoConfirmacao(params);
 	}
 	
@@ -94,7 +91,7 @@ public class PagamentoWS {
 	@WebResult(name="resultadoWS")
 	public String realizarCancelamento(){
 		IPagamentoWS service = new GetNetService();
-		return service.realizarEstorno();
+		return service.realizarCancelamento();
 	}
 	
 }

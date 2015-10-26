@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import br.com.gwpay.pagamento.dao.BandeiraDao;
 import br.com.gwpay.pagamento.dao.ClienteDao;
+import br.com.gwpay.pagamento.dao.ErroAdquirenteDao;
 import br.com.gwpay.pagamento.dao.HistoricoTransacaoDao;
 import br.com.gwpay.pagamento.dao.OperacaoDao;
 import br.com.gwpay.pagamento.dao.TipoTransacaoDao;
@@ -19,13 +20,35 @@ import br.com.gwpay.pagamento.plugin.MPIPlugin;
 public class GetNetService implements IPagamentoWS{
 
 	@Override
-	public String realizarCredito(Parametros params) {
+	public String realizarCreditoCompleto(ParametrosAutorizacao params) {
 		return null;
 	}
 
 	@Override
 	public ResultadoWS realizarCreditoAutorizacao(ParametrosAutorizacao params) throws AdquirenteException, GWPayException{
 		MPIPlugin plugin = new MPIPlugin();
+		
+		// ### Verifica campos obrigatórios
+		if((params.getCodCliente().equals("") || params.getCodCliente() == null) ||
+			(params.getCodGWPay().equals("") || params.getCodGWPay() == null) ||	
+			(params.getValor() == 0) ||
+			(params.getBandeira().equals("") || params.getBandeira() == null) ||
+			(params.getNumCartao().equals("") || params.getNumCartao() == null) ||
+			(params.getNomePortador().equals("") || params.getNomePortador() == null) ||
+			(params.getMesVencimento() == 0) ||
+			(params.getAnoVencimento() == 0) ||
+			(params.getCodSegurancaCartao().equals("") || params.getCodSegurancaCartao() == null)){
+			
+			GWPayException exception = new GWPayException("Parâmetros Obrigatórios.");
+			exception.setInfoFault("GW00", "Há um ou mais Parâmetros obrigatórios faltando." , "Há um ou mais Parâmetros obrigatórios faltando." , "Favor verificar os parâmetros");
+			throw exception;
+			
+		}
+		
+		
+		
+		
+		
 		
 		String terminalIdComposto = "";
 		HashMap<String, String> camposRetornoTerminal = new HashMap<>();
@@ -60,7 +83,8 @@ public class GetNetService implements IPagamentoWS{
 			if(clienteId == 0){
 				//@EXCEPTION CRIAR CÓDIGO
 				GWPayException exception = new GWPayException("Parâmetro Incorreto.");
-				exception.setInfoFault("GW02", "Parâmetro incorreto ou cliente não existe." , "Paramêtro cliente incorreto ou cliente não existe." , "Favor verificar seu código GWPay");
+				exception.setInfoFault("GW02", "Parâmetro codGWPay incorreto ou cliente não existe." , "Paramêtro codGWPay incorreto ou cliente não existe." , "Favor verificar seu código GWPay");
+				throw exception;
 			}
 			
 			
@@ -68,6 +92,7 @@ public class GetNetService implements IPagamentoWS{
 				//@EXCEPTION CRIAR CÓDIGO
 				GWPayException exception = new GWPayException("Parâmetro Incorreto.");
 				exception.setInfoFault("GW01", "Parâmetro incorreto." , "Paramêtro bandeira incorreto." , "Favor verificar parametro");
+				throw exception;
 			}
 			
 			if(params.getTipoParcelamento() == null){
@@ -130,8 +155,49 @@ public class GetNetService implements IPagamentoWS{
 			HistoricoTransacaoDao dao = new HistoricoTransacaoDao();
 			dao.inserirHistoricoTransacao(transacao);
 		
+			
+			ResultadoWS result = new ResultadoWS();
+			// ### SE HOUVER ERRO RETORNA EXCECAO ADQUIRENTE ###
+			if(camposRetorno.containsKey("error_code") && camposRetorno.get("error_code").equals("erroPerform")){
+				ErroAdquirenteDao eDao = new ErroAdquirenteDao();
+				HashMap camposRetornoErro = eDao.getDadosErro(camposRetorno.get("error_code"), "GETNET");
+				
+				
+				AdquirenteException exception = new AdquirenteException("Erro na chamada do serviço Adquirente");
+				exception.setInfoFault(camposRetorno.get("error_code"), camposRetorno.get("error_text") , camposRetornoErro.get("descricao").toString() , camposRetornoErro.get("acao").toString() );
+				throw exception;
 		
-		} catch (Exception e) {
+			}else if(camposRetorno.containsKey("error_code") && !camposRetorno.get("error_code").equals("")){
+				
+				ErroAdquirenteDao eDao = new ErroAdquirenteDao();
+				HashMap camposRetornoErro = eDao.getDadosErro(camposRetorno.get("error_code"), "GETNET");
+				
+				
+				AdquirenteException exception = new AdquirenteException("Erro na chamada do serviço Adquirente");
+				exception.setInfoFault(camposRetorno.get("error_code"), camposRetorno.get("error_text") , camposRetornoErro.get("descricao").toString() , camposRetornoErro.get("acao").toString() );
+				throw exception;
+		
+			}
+			
+			// colocar descricao vinda do banco
+			result.setCodigoResposta(camposRetorno.get("responsecode"));
+			result.setMensagemResposta(camposRetorno.get("result"));
+			result.setDescricaoResposta(camposRetorno.get("Descricao vinda do banco"));
+			
+			result.setCodigoNSU(camposRetorno.get("tranid"));
+			result.setCodigoRastreio(camposRetorno.get("trackid"));
+			
+			return result;
+			
+		
+		}catch (GWPayException e) {
+			
+			throw e;
+		}catch (AdquirenteException e) {
+			
+			throw e;
+		}
+		catch (Exception e) {
 			
 			//@EXCEPTION CRIAR CÓDIGO
 			GWPayException exception = new GWPayException("Erro de conexão.");
@@ -141,33 +207,7 @@ public class GetNetService implements IPagamentoWS{
 		
 		
 		
-		ResultadoWS result = new ResultadoWS();
-		// ### SE HOUVER ERRO RETORNA EXCECAO ADQUIRENTE ###
-		if(camposRetorno.containsKey("error_code") && camposRetorno.get("error_code").equals("erroPerform")){
-			
-			AdquirenteException exception = new AdquirenteException("Erro na chamada do serviço Adquirente");
-			// Preencher Descricao e acao vinda do banco
-			exception.setInfoFault(camposRetorno.get("error_code"), camposRetorno.get("error_text") , "Descricao vinda do banco" , "Acao vinda do banco");
-			throw exception;
-	
-		}else if(camposRetorno.containsKey("error_code") && !camposRetorno.get("error_code").equals("")){
-			
-			AdquirenteException exception = new AdquirenteException("Erro na chamada do serviço Adquirente");
-			// Preencher Descricao e acao vinda do banco
-			exception.setInfoFault(camposRetorno.get("error_code"), camposRetorno.get("error_text") , "Descricao vinda do banco" , "Acao vinda do banco");
-			throw exception;
-	
-		}
 		
-		// colocar descricao vinda do banco
-		result.setCodigoResposta(camposRetorno.get("responsecode"));
-		result.setMensagemResposta(camposRetorno.get("result"));
-		result.setDescricaoResposta(camposRetorno.get("Descricao vinda do banco"));
-		
-		result.setCodigoNSU(camposRetorno.get("tranid"));
-		result.setCodigoRastreio(camposRetorno.get("trackid"));
-		
-		return result;
 		
 	}
 
@@ -187,7 +227,7 @@ public class GetNetService implements IPagamentoWS{
 	}
 
 	@Override
-	public String realizarEstorno() {
+	public String realizarCancelamento() {
 		return null;
 	}
 
