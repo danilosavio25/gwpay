@@ -12,6 +12,8 @@ public class Parametros {
 	@XmlElement(required=true)
 	private String codCliente; //terminalId
 	@XmlElement(required=true)
+	private String codGWPay; //codigo unico GWPay
+	@XmlElement(required=true)
 	private String codNSU;
 	@XmlElement(required=true)
 	private double valor;
@@ -36,7 +38,15 @@ public class Parametros {
 		this.codCliente = codCliente;
 	}
 
+	public String getCodGWPay() {
+		return codGWPay;
+	}
 
+
+
+	public void setCodGWPay(String codGWPay) {
+		this.codGWPay = codGWPay;
+	}
 
 	public String getCodRastreio() {
 		return codRastreio;

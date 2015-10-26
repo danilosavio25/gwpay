@@ -15,5 +15,6 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="C:/Workspaces/Libs/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="C:/Workspaces/Libs/plugin.jar"/>
+	<classpathentry kind="lib" path="C:/Workspaces/Libs/postgresql-9.4-1202.jdbc4.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

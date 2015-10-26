@@ -142,13 +142,7 @@ public class HistoricoTransacaoDao {
 			pstmt.setInt(1,id);
 			ResultSet rs = pstmt.executeQuery();
 				
-	/*		Authentication auth = new Authentication();
-				while(rs.next()){
-					auth.setPassword(rs.getString("password"));
-					auth.setUser(rs.getString("name"));
-					System.out.println( "Result: "+rs.getString("password"));
-				}
-				*/
+
 				rs.close();
 
 			pstmt.close();

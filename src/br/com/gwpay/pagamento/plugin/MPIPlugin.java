@@ -4,9 +4,12 @@ import java.util.HashMap;
 
 import com.aciworldwide.commerce.gateway.plugins.UniversalPlugin;
 
+import br.com.gwpay.pagamento.exception.AdquirenteException;
+import br.com.gwpay.pagamento.exception.GWPayException;
 import br.com.gwpay.pagamento.model.Parametros;
 import br.com.gwpay.pagamento.model.ParametrosAutenticacao;
 import br.com.gwpay.pagamento.model.ParametrosAutorizacao;
+import br.com.gwpay.pagamento.ws.PagamentoWS;
 
 public class MPIPlugin {
 	
@@ -46,10 +49,40 @@ public class MPIPlugin {
 	
 	public static void main(String[] args) {
 		MPIPlugin plugin = new MPIPlugin();
+		
+		
+		ParametrosAutorizacao params = new ParametrosAutorizacao();
+		/*params.setCodCliente("D087729102");
+		params.setBandeira("Master");
+		params.setNumCartao("5453010000083303");
+		params.setCodSegurancaCartao("321");
+		params.setNomePortador("ANTONIO NUNES SILVA");
+		params.setAnoVencimento(2017);
+		params.setMesVencimento(04);
+		params.setValor(100.00);
+		System.out.println(plugin.realizarCreditoAutorizacao(params));*/
+		
+		
+		plugin.realizarCancelamento(params);
 	//	plugin.cancelamento();
 	}
 	
 	public HashMap realizarCreditoAutorizacao(ParametrosAutorizacao params){
+		
+		System.out.println(params.getAnoVencimento());
+		params.setCodRastreio("");
+		System.out.println(params.getCodRastreio());
+		System.out.println(params.getCodCliente());
+		System.out.println(params.getCodSegurancaCartao());
+		System.out.println(params.getMesVencimento());
+		System.out.println(params.getNomePortador());
+		System.out.println(params.getNumCartao());
+		System.out.println(params.getValor());
+		params.setCodNSU("");
+		System.out.println(params.getCodNSU());
+		params.setTipoParcelamento("SGL");
+		System.out.println(params.getTipoParcelamento());
+		System.out.println(params.getNumParcelas());
 		
 		UniversalPlugin plugin = new UniversalPlugin();
 		
@@ -107,7 +140,7 @@ public class MPIPlugin {
 		}
 		
 	}
-	
+
 	
 	public void realizarCreditoConfirmacao(Parametros params){
 		
@@ -224,7 +257,7 @@ public class MPIPlugin {
 		plugin.set("trackid" , "123456789");
 		plugin.set("amt" , "100.00");
 		plugin.set("currencycode", "986");
-		
+		System.out.println("oi");
 		if(!plugin.performTransaction()){
 			System.out.println( "Erro Conf: " + plugin.getErrorText() );
 		}else{
@@ -241,40 +274,5 @@ public class MPIPlugin {
 			}
 		}
 	}
-	
-	/*public HashMap performTransaction(UniversalPlugin plugin){
-		
-		if(!plugin.performTransaction()){
-			System.out.println( "Erro : " + plugin.getErrorText() );
-			HashMap camposRetorno = new HashMap<String, String>();
-			camposRetorno.put("error_text", plugin.getErrorText());
-			return camposRetorno;
-		}else{
-			String error_code = plugin.get("error_code_tag");
-			String error_text = plugin.get("error_text");
-			if(error_code != null && error_code.length() > 0 ){
-				System.out.println( "C�digo Erro : " + error_code );
-				System.out.println( "Mensagem : " + error_text );
-				
-				//return "C�digo Erro : " + error_code +  " Mensagem : " + error_text;
-				HashMap camposRetorno = new HashMap<String, String>();
-				camposRetorno.put("error_code", error_code);
-				camposRetorno.put("error_text", error_text);
-				return camposRetorno;
-			}  else{
-				System.out.println( "C�digo Resposta : " + plugin.get("result") );
-				System.out.println( "Resposta : " + plugin.get("responsecode"));
-				System.out.println(plugin.getResponseFields());
-				HashMap camposRetorno = new HashMap<String, String>();
-				camposRetorno.put("result", plugin.get("result"));
-				camposRetorno.put("responsecode", plugin.get("responsecode"));
-				camposRetorno.put("tranid", plugin.get("tranid"));
-				camposRetorno.put("trackid", plugin.get("trackid"));
-				
-				return camposRetorno;
-			}
-		}
-	}
-	*/
 	
 }

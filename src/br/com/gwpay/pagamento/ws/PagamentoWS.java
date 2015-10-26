@@ -11,6 +11,7 @@ import javax.jws.soap.SOAPBinding.Use;
 import javax.xml.bind.annotation.XmlElement;
 
 import br.com.gwpay.pagamento.exception.AdquirenteException;
+import br.com.gwpay.pagamento.exception.GWPayException;
 import br.com.gwpay.pagamento.model.Parametros;
 import br.com.gwpay.pagamento.model.ParametrosAutorizacao;
 import br.com.gwpay.pagamento.model.ResultadoWS;
@@ -25,7 +26,7 @@ public class PagamentoWS {
 	
 	@WebMethod(operationName="credito")
 	@WebResult(name="resultadoWS")
-	public String realizarCredito(){
+	public String realizarCredito() throws AdquirenteException, GWPayException{
 		IPagamentoWS service = new GetNetService();
 		Parametros params = new Parametros();
 		return service.realizarCredito(params);
@@ -33,7 +34,7 @@ public class PagamentoWS {
 	
 	@WebMethod(operationName="creditoAutorizacao")
 	@WebResult(name="resultadoWS")
-	public ResultadoWS realizarCreditoAutorizacao(@XmlElement(required=true) @WebParam(name="parametros") ParametrosAutorizacao params) throws AdquirenteException{
+	public ResultadoWS realizarCreditoAutorizacao(@XmlElement(required=true) @WebParam(name="parametros") ParametrosAutorizacao params) throws AdquirenteException, GWPayException{
 		IPagamentoWS service = new GetNetService();
 		
 		/*if(params.getCodCliente() == null || params.getCodCliente().equals("")){
@@ -41,21 +42,23 @@ public class PagamentoWS {
 		}*/
 		
 		
-		/*params.setCodCliente("D087729102");
+	/*	params.setCodCliente("D087729102");
 		params.setBandeira("Master");
 		params.setNumCartao("5453010000083303");
 		params.setCodSegurancaCartao("321");
 		params.setNomePortador("ANTONIO NUNES SILVA");
-		params.setAnoVencimento("2017");
-		params.setMesVencimento("04");
+		params.setAnoVencimento(2017);
+		params.setMesVencimento(04);
 		params.setValor(100.00);*/
 		
 		return service.realizarCreditoAutorizacao(params);
 	}
 	
+	
+	
 	@WebMethod(operationName="creditoConfirmacao")
 	@WebResult(name="resultadoWS")
-	public String realizarCreditoConfirmacao(){
+	public String realizarCreditoConfirmacao() throws AdquirenteException, GWPayException{
 		IPagamentoWS service = new GetNetService();
 		
 		Parametros params = new Parametros();
@@ -80,7 +83,7 @@ public class PagamentoWS {
 	
 	@WebMethod(operationName="consultaTransacao")
 	@WebResult(name="resultadoWS")
-	public String realizarConsultaTransacao(@WebParam(name="codigoCliente") String codigoCliente,@WebParam(name="codigoRastreio") String codigoRastreio){
+	public String realizarConsultaTransacao(@WebParam(name="codigoCliente") String codigoCliente,@WebParam(name="codigoRastreio") String codigoRastreio) throws AdquirenteException, GWPayException{
 		IPagamentoWS service = new GetNetService();
 		Parametros params = new Parametros();
 

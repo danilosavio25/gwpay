@@ -2,16 +2,17 @@ package br.com.gwpay.pagamento.exception;
 
 import javax.xml.ws.WebFault;
 
-@WebFault(name="AdquirenteFault", messageName="AdquirenteFault")
-public class AdquirenteException extends Exception {
+@WebFault(name="GWPayFault", messageName="GWPayFault")
+public class GWPayException extends Exception {
+	
 	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 809006962569609462L;
+	private static final long serialVersionUID = -388286821059586714L;
 	private InfoFault infoFault;
 	
-	public AdquirenteException(String msg){
+	public GWPayException(String msg){
 		super(msg);
 		infoFault = new InfoFault("", "", "", "");
 	}
