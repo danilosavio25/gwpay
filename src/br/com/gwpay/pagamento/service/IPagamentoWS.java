@@ -8,18 +8,18 @@ import br.com.gwpay.pagamento.model.ResultadoWS;
 
 public interface IPagamentoWS {
 	
-	public String realizarCreditoCompleto(ParametrosAutorizacao params) throws AdquirenteException, GWPayException;
+	public ResultadoWS realizarCreditoCompleto(ParametrosAutorizacao params) throws AdquirenteException, GWPayException;
 	
 	public ResultadoWS realizarCreditoAutorizacao(ParametrosAutorizacao params) throws AdquirenteException, GWPayException;
 	
-	public String realizarCreditoConfirmacao(Parametros params) throws AdquirenteException, GWPayException;
+	public ResultadoWS realizarCreditoConfirmacao(Parametros params) throws AdquirenteException, GWPayException;
 	
 	public String realizarDebito();
 	
 	public String realizarCreditoAutenticacao();
 	
-	public String realizarConsultaTransacao(Parametros params) throws AdquirenteException, GWPayException;
+	public ResultadoWS realizarConsultaTransacao(Parametros params) throws AdquirenteException, GWPayException;
 	
-	public String realizarCancelamento();
+	public ResultadoWS realizarCancelamento(Parametros params) throws AdquirenteException, GWPayException;
 	
 }

@@ -1,9 +1,13 @@
 package br.com.gwpay.pagamento.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.HashMap;
 
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
@@ -28,6 +32,16 @@ public class HistoricoTransacaoDao {
 			 ds = (DataSource) ic.lookup("java:jboss/datasources/PostgreSQLDS");  
 			 connection = ds.getConnection();
 
+			 
+		/*	 
+			 String url = "jdbc:postgresql://localhost:5432/GWPayBD";  
+			 String usuario = "GWPayAdminBD";  
+			 String senha = "GWPayAdminBD00";
+			 
+			 Class.forName("org.postgresql.Driver").newInstance();  
+		      connection = DriverManager.getConnection(url, usuario, senha); */
+			 
+			 
 		} catch (Exception e) {
 
 			System.out.println("Connection Failed! Check output console");
@@ -86,7 +100,17 @@ public class HistoricoTransacaoDao {
 				pstmt.setString(7, transacao.getNumCartao());
 				pstmt.setInt(8, transacao.getMesVencimentoCartao());
 				pstmt.setInt(9, transacao.getAnoVencimentoCartao());
-				pstmt.setString(10, transacao.getNomePortador());
+				
+				String nomePortador = "";
+				if(transacao.getNomePortador() != null){
+					if(transacao.getNomePortador().length() > 26){
+						nomePortador = transacao.getNomePortador().substring(0, 26);
+					}else{
+						nomePortador = transacao.getNomePortador();
+					}
+				}
+				
+				pstmt.setString(10, nomePortador);
 				pstmt.setString(11, transacao.getCampo1());
 				pstmt.setString(12, transacao.getCampo2());
 				pstmt.setString(13, transacao.getCampo3());
@@ -128,7 +152,57 @@ public class HistoricoTransacaoDao {
 		
 	}
 	
-	public String getUserData(int id){
+	public static void main(String[] args) {
+		HistoricoTransacaoDao h = new HistoricoTransacaoDao();
+		h.getBandeiraTransacao("2292945311652751");
+	}
+
+	
+	public HashMap getBandeiraTransacao(String codNSU){
+	
+		try {
+			
+			Connection conn = getConnection();
+			System.out.println("after getconn");
+			PreparedStatement pstmt;
+			
+			pstmt = conn.prepareStatement("SELECT H.BANDEIRA_ID as BANDEIRA_ID, B.NOME AS NOME FROM HISTORICO_TRANSACAO H "
+										  +"JOIN BANDEIRA B ON H.BANDEIRA_ID = B.ID "
+										  +"AND H.NSU_ID = ? "
+										  +"AND H.TIP_TRS_ID <> 8 "
+										  +"AND H.COD_ERRO_GWY  is null ");
+	
+			//'2292945311652751'
+			pstmt.setString(1,codNSU);
+			
+	
+			ResultSet rs = pstmt.executeQuery();
+				
+			
+			HashMap camposRetorno = new HashMap<String, String>();
+			camposRetorno.put("bandeira_id", "");
+			camposRetorno.put("nome", "");
+			while (rs.next()) {
+				camposRetorno.put("bandeira_id", rs.getString("bandeira_id"));
+				camposRetorno.put("nome", rs.getString("nome"));
+			}
+			
+			rs.close();
+	
+			pstmt.close();
+			conn.close();
+			
+			return camposRetorno;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		return null;
+	
+	}
+	
+	public Timestamp getDataTransacao(String codNSU){
 		
 		try {
 			
@@ -136,26 +210,37 @@ public class HistoricoTransacaoDao {
 			System.out.println("after getconn");
 			PreparedStatement pstmt;
 			
-			pstmt = conn.prepareStatement("SELECT * FROM usuario WHERE ID = ?");
-
-
-			pstmt.setInt(1,id);
+			pstmt = conn.prepareStatement("SELECT DAT_TRS FROM HISTORICO_TRANSACAO WHERE NSU_ID = ? AND TIP_TRS_ID <> 8"); 
+	
+			//'2292945311652751'
+			pstmt.setString(1,codNSU);
+			
+	
 			ResultSet rs = pstmt.executeQuery();
 				
-
-				rs.close();
-
+			
+			Timestamp dataTransacao = null;
+			while (rs.next()) {
+				dataTransacao = rs.getTimestamp("dat_trs");
+			}
+			
+			rs.close();
+	
 			pstmt.close();
 			conn.close();
 			
-			return "";
+			return dataTransacao;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+	
 		return null;
-		
+	
 	}
+	
+	
+	
+	
 	
 }

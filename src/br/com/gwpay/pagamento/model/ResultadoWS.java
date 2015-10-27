@@ -11,8 +11,9 @@ public class ResultadoWS {
 	private String codigoResposta;
     private String mensagemResposta;
     private String descricaoResposta;
-    private String codigoNSU;
+	private String codigoNSU;
     private String codigoRastreio;
+    private String dataTransacao;
 	
     public ResultadoWS() {
 	}
@@ -46,6 +47,12 @@ public class ResultadoWS {
 	}
 	public void setCodigoRastreio(String codigoRastreio) {
 		this.codigoRastreio = codigoRastreio;
+	}
+	public String getDataTransacao() {
+		return dataTransacao;
+	}
+	public void setDataTransacao(String dataTransacao) {
+		this.dataTransacao = dataTransacao;
 	}
 	
 }

@@ -26,9 +26,8 @@ public class PagamentoWS {
 	
 	@WebMethod(operationName="creditoCompleto")
 	@WebResult(name="resultadoWS")
-	public String realizarCredito() throws AdquirenteException, GWPayException{
+	public ResultadoWS realizarCredito(@XmlElement(required=true) @WebParam(name="parametros") ParametrosAutorizacao params) throws AdquirenteException, GWPayException{
 		IPagamentoWS service = new GetNetService();
-		ParametrosAutorizacao params = new ParametrosAutorizacao();
 		return service.realizarCreditoCompleto(params);
 	}
 	
@@ -58,9 +57,8 @@ public class PagamentoWS {
 	
 	@WebMethod(operationName="creditoConfirmacao")
 	@WebResult(name="resultadoWS")
-	public String realizarCreditoConfirmacao() throws AdquirenteException, GWPayException{
+	public ResultadoWS realizarCreditoConfirmacao(@XmlElement(required=true) @WebParam(name="parametros") Parametros params) throws AdquirenteException, GWPayException{
 		IPagamentoWS service = new GetNetService();
-		Parametros params = new Parametros();
 		return service.realizarCreditoConfirmacao(params);
 	}
 	
@@ -80,18 +78,16 @@ public class PagamentoWS {
 	
 	@WebMethod(operationName="consultaTransacao")
 	@WebResult(name="resultadoWS")
-	public String realizarConsultaTransacao(@WebParam(name="codigoCliente") String codigoCliente,@WebParam(name="codigoRastreio") String codigoRastreio) throws AdquirenteException, GWPayException{
+	public ResultadoWS realizarConsultaTransacao(@XmlElement(required=true) @WebParam(name="parametros") Parametros params) throws AdquirenteException, GWPayException{
 		IPagamentoWS service = new GetNetService();
-		Parametros params = new Parametros();
-
 		return service.realizarConsultaTransacao(params);
 	}
 	
 	@WebMethod(operationName="cancelamento")
 	@WebResult(name="resultadoWS")
-	public String realizarCancelamento(){
+	public ResultadoWS realizarCancelamento(@XmlElement(required=true) @WebParam(name="parametros") Parametros params) throws AdquirenteException, GWPayException{
 		IPagamentoWS service = new GetNetService();
-		return service.realizarCancelamento();
+		return service.realizarCancelamento(params);
 	}
 	
 }
