@@ -4,9 +4,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
-import javax.jws.WebParam;
-import javax.xml.bind.annotation.XmlElement;
-
 import br.com.gwpay.pagamento.dao.BandeiraDao;
 import br.com.gwpay.pagamento.dao.ClienteDao;
 import br.com.gwpay.pagamento.dao.ErroAdquirenteDao;
@@ -26,7 +23,7 @@ public class GetNetService implements IPagamentoWS{
 	@Override
 	public ResultadoWS realizarCreditoCompleto(ParametrosAutorizacao params)  throws AdquirenteException, GWPayException{
 		MPIPlugin plugin = new MPIPlugin();
-		
+	//############################################ CAMPOS OBRIGATÓRIOS ###########################################	
 		// ### Verifica campos obrigatórios
 		if((params.getCodCliente().equals("") || params.getCodCliente() == null) ||
 			(params.getCodGWPay().equals("") || params.getCodGWPay() == null) ||	
@@ -43,7 +40,8 @@ public class GetNetService implements IPagamentoWS{
 			throw exception;
 			
 		}
-		
+	
+	//############################################ DADOS ############################################################
 		String terminalIdComposto = "";
 		HashMap<String, String> camposRetornoTerminal = new HashMap<>();
 		int bandeiraId = 0;
@@ -96,10 +94,11 @@ public class GetNetService implements IPagamentoWS{
 			System.out.println("terminalIdComposto: " + terminalIdComposto);
 			params.setCodCliente(terminalIdComposto);
 			
-			
+		//############################################ PLUGIN ############################################################	
 			// ### EXECUTA METODO DO PLUGIN ###
 			camposRetorno = plugin.realizarCreditoAutorizacao(params);
-			
+
+		//############################################ HISTORICO ############################################################	
 			//### SALVA TRANSACAO NO BANCO DE DADOS ###
 			HistoricoTransacao transacao = new HistoricoTransacao();
 			transacao.setCodCliente(terminalIdComposto);
@@ -148,7 +147,7 @@ public class GetNetService implements IPagamentoWS{
 			HistoricoTransacaoDao dao = new HistoricoTransacaoDao();
 			dao.inserirHistoricoTransacao(transacao);
 		
-			
+		//############################################ RESULTADO ############################################################	
 			ResultadoWS result = new ResultadoWS();
 			// ### SE HOUVER ERRO RETORNA EXCECAO ADQUIRENTE ###
 			if(camposRetorno.containsKey("error_code") && camposRetorno.get("error_code").equals("erroPerform")){
@@ -200,7 +199,7 @@ public class GetNetService implements IPagamentoWS{
 	@Override
 	public ResultadoWS realizarCreditoAutorizacao(ParametrosAutorizacao params) throws AdquirenteException, GWPayException{
 		MPIPlugin plugin = new MPIPlugin();
-		
+	//############################################ CAMPOS OBRIGATÓRIOS ###########################################	
 		// ### Verifica campos obrigatórios
 		if((params.getCodCliente().equals("") || params.getCodCliente() == null) ||
 			(params.getCodGWPay().equals("") || params.getCodGWPay() == null) ||	
@@ -217,7 +216,7 @@ public class GetNetService implements IPagamentoWS{
 			throw exception;
 			
 		}
-		
+	//############################################ DADOS ############################################################
 		String terminalIdComposto = "";
 		HashMap<String, String> camposRetornoTerminal = new HashMap<>();
 		int bandeiraId = 0;
@@ -243,6 +242,7 @@ public class GetNetService implements IPagamentoWS{
 			// ### Busca o ID do cliente no banco de dados ####	
 			ClienteDao cDao = new ClienteDao();
 			clienteId = cDao.getClienteId(params.getCodGWPay());
+	
 			
 			// ### VERIFICACOES DE SEGURANCA ###
 			if(clienteId == 0){
@@ -270,10 +270,11 @@ public class GetNetService implements IPagamentoWS{
 			System.out.println("terminalIdComposto: " + terminalIdComposto);
 			params.setCodCliente(terminalIdComposto);
 			
-			
+		//############################################ PLUGIN ############################################################	
 			// ### EXECUTA METODO DO PLUGIN ###
 			camposRetorno = plugin.realizarCreditoAutorizacao(params);
 			
+		//############################################ HISTORICO ############################################################	
 			//### SALVA TRANSACAO NO BANCO DE DADOS ###
 			HistoricoTransacao transacao = new HistoricoTransacao();
 			transacao.setCodCliente(terminalIdComposto);
@@ -323,7 +324,7 @@ public class GetNetService implements IPagamentoWS{
 			HistoricoTransacaoDao dao = new HistoricoTransacaoDao();
 			dao.inserirHistoricoTransacao(transacao);
 		
-			
+		//############################################ RESULTADO ############################################################
 			ResultadoWS result = new ResultadoWS();
 			// ### SE HOUVER ERRO RETORNA EXCECAO ADQUIRENTE ###
 			if(camposRetorno.containsKey("error_code") && camposRetorno.get("error_code").equals("erroPerform")){
@@ -375,7 +376,7 @@ public class GetNetService implements IPagamentoWS{
 	@Override
 	public ResultadoWS realizarCreditoConfirmacao(Parametros params) throws AdquirenteException, GWPayException {
 		MPIPlugin plugin = new MPIPlugin();
-		
+	//############################################ CAMPOS OBRIGATORIOS ############################################################	
 		// ### Verifica campos obrigatórios
 		if((params.getCodCliente().equals("") || params.getCodCliente() == null) ||
 			(params.getCodGWPay().equals("") || params.getCodGWPay() == null) ||
@@ -387,7 +388,7 @@ public class GetNetService implements IPagamentoWS{
 			throw exception;
 			
 		}
-		
+	//############################################ DADOS ############################################################	
 		String terminalIdComposto = "";
 		HashMap<String, String> camposRetornoTerminal = new HashMap<>();
 		int bandeiraId = 0;
@@ -444,10 +445,13 @@ public class GetNetService implements IPagamentoWS{
 			System.out.println("terminalIdComposto: " + terminalIdComposto);
 			params.setCodCliente(terminalIdComposto);
 			
-			
+		//############################################ PLUGIN ############################################################	
+		
 			// ### EXECUTA METODO DO PLUGIN ###
 			camposRetorno = plugin.realizarCreditoConfirmacao(params);
-			
+		
+		//############################################ HISTORICO ############################################################	
+	
 			//### SALVA TRANSACAO NO BANCO DE DADOS ###
 			HistoricoTransacao transacao = new HistoricoTransacao();
 			transacao.setCodCliente(terminalIdComposto);
@@ -487,7 +491,8 @@ public class GetNetService implements IPagamentoWS{
 			HistoricoTransacaoDao dao = new HistoricoTransacaoDao();
 			dao.inserirHistoricoTransacao(transacao);
 		
-			
+		//############################################ RESULTADO ############################################################	
+	
 			ResultadoWS result = new ResultadoWS();
 			// ### SE HOUVER ERRO RETORNA EXCECAO ADQUIRENTE ###
 			if(camposRetorno.containsKey("error_code") && camposRetorno.get("error_code").equals("erroPerform")){
@@ -541,10 +546,11 @@ public class GetNetService implements IPagamentoWS{
 	}
 
 	@Override
-	public ResultadoWS realizarConsultaTransacao(@XmlElement(required=true) @WebParam(name="parametros") Parametros params) throws AdquirenteException, GWPayException{
+	public ResultadoWS realizarConsultaTransacao(Parametros params) throws AdquirenteException, GWPayException{
 		
-			MPIPlugin plugin = new MPIPlugin();
-		
+		MPIPlugin plugin = new MPIPlugin();
+	//############################################ CAMPOS OBRIGATÓRIOS ###########################################	
+
 		// ### Verifica campos obrigatórios
 		if((params.getCodCliente().equals("") || params.getCodCliente() == null) ||
 			(params.getCodGWPay().equals("") || params.getCodGWPay() == null) ||
@@ -555,60 +561,28 @@ public class GetNetService implements IPagamentoWS{
 			throw exception;
 			
 		}
-		
+	//############################################ DADOS ####################################################	
+
 		String terminalIdComposto = "";
 		HashMap<String, String> camposRetornoTerminal = new HashMap<>();
-		int bandeiraId = 0;
 		HashMap<String, String> camposRetorno = new HashMap<>();
-		HashMap<String, String> camposRetornoBandeira = new HashMap<>();
-		int tipoTransacaoId = 0;
-		int clienteId = 0;
 		String dataTransacaoS = "";
 		Timestamp dataTransacao = null;
 		
 		//### TRY TRATA AS EXCECOES SQL E DE ERRO DE CONEXAO DO PLUGIN ###
 		try {
 			
-			HistoricoTransacaoDao hDao = new HistoricoTransacaoDao();
-			camposRetornoBandeira = hDao.getBandeiraTransacao(params.getCodNSU());
-		
 			// ### Busca a data da transação
+			HistoricoTransacaoDao hDao = new HistoricoTransacaoDao();
 			dataTransacao = hDao.getDataTransacao(params.getCodNSU());
 			if(dataTransacao != null){
 				dataTransacaoS = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(dataTransacao);
 			}
 			
-			if(camposRetornoBandeira.get("bandeira_id").equals("")){
-				//@EXCEPTION CRIAR CÓDIGO
-				GWPayException exception = new GWPayException("Parâmetro Incorreto.");
-				exception.setInfoFault("GW04", "Parâmetro codNSU incorreto ou transação não existe." , "Parâmetro codNSU incorreto ou transação não existe." , "Favor verificar o código codNSU");
-				throw exception;
-			}
-			
+		
 			// ### Busca os dados de terminal ID no banco de dados ####
 			OperacaoDao oDao = new OperacaoDao();
-			camposRetornoTerminal = oDao.getDadosTerminalId(camposRetornoBandeira.get("nome"), "CREDITO", "GETNET");
-		
-			bandeiraId = Integer.parseInt(camposRetornoBandeira.get("bandeira_id"));
-			
-			// ### Busca o ID do tipoTransacao no banco de dados ####	
-			TipoTransacaoDao trDao = new TipoTransacaoDao();
-			tipoTransacaoId =  trDao.getTipoTransacaoId("CONSULTA");
-			
-			// ### Busca o ID do cliente no banco de dados ####	
-			ClienteDao cDao = new ClienteDao();
-			clienteId = cDao.getClienteId(params.getCodGWPay());
-			
-			
-			
-			
-			// ### VERIFICACOES DE SEGURANCA ###
-			if(clienteId == 0){
-				//@EXCEPTION CRIAR CÓDIGO
-				GWPayException exception = new GWPayException("Parâmetro Incorreto.");
-				exception.setInfoFault("GW02", "Parâmetro codGWPay incorreto ou cliente não existe." , "Paramêtro codGWPay incorreto ou cliente não existe." , "Favor verificar seu código GWPay");
-				throw exception;
-			}
+			camposRetornoTerminal = oDao.getDadosTerminalId(params.getBandeira(), "CREDITO", "GETNET");
 			
 			
 			if (!camposRetornoTerminal.containsKey("sufixo")) {
@@ -623,49 +597,12 @@ public class GetNetService implements IPagamentoWS{
 			System.out.println("terminalIdComposto: " + terminalIdComposto);
 			params.setCodCliente(terminalIdComposto);
 			
-			
+		//############################################ PLUGIN ####################################################		
+
 			// ### EXECUTA METODO DO PLUGIN ###
 			camposRetorno = plugin.realizarConsultaTransacao(params);
-			
-			//### SALVA TRANSACAO NO BANCO DE DADOS ###
-			HistoricoTransacao transacao = new HistoricoTransacao();
-			transacao.setCodCliente(terminalIdComposto);
-			transacao.setCodRastreio(params.getCodRastreio());
-			transacao.setValor(params.getValor());
-			transacao.setMoeda("986");			
-
-			
-			if(camposRetorno.containsKey("tranid")){
-				transacao.setCodTransacaoOriginal(camposRetorno.get("tranid"));
-				transacao.setCodNSU(camposRetorno.get("tranid"));
-				transacao.setDescricaoResposta(camposRetorno.get("result"));
-				transacao.setCodResposta(camposRetorno.get("responsecode"));
-				
-			}else{
-				System.out.println("zerandooo");
-				transacao.setCodNSU("");
-				transacao.setDescricaoResposta("");
-				transacao.setCodResposta("");
-				transacao.setCodTransacaoOriginal(params.getCodNSU());
-				transacao.setCodErroGateway(camposRetorno.get("error_code"));
-				transacao.setDescricaoErroGateway(camposRetorno.get("error_text"));
-				transacao.setCodErroWS(camposRetorno.get(""));
-				transacao.setDescricaoErroWS(camposRetorno.get(""));
-			}
-			
-			transacao.setValorTotal(params.getValor()) ;
-			transacao.setTaxaJuros(0.0);
-			transacao.setJurosInstFinanceira(0.0);
-			transacao.setTipoTransacaoId(tipoTransacaoId);
-			transacao.setClienteId(clienteId);
-			transacao.setBandeiraId(bandeiraId);
-			
-			// ### Não é cancelamento tipo = 0 ###
-			transacao.setTipoCancelamentoId(0);
-			
-			HistoricoTransacaoDao dao = new HistoricoTransacaoDao();
-			dao.inserirHistoricoTransacao(transacao);
 		
+		//############################################ RESULTADO ####################################################
 			
 			ResultadoWS result = new ResultadoWS();
 			// ### SE HOUVER ERRO RETORNA EXCECAO ADQUIRENTE ###

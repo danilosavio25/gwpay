@@ -9,8 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ParametrosAutorizacao extends Parametros {
 	
-	@XmlElement(required=true)
-	private String bandeira;
+	
 	@XmlElement(required=true)
 	private String numCartao;
 	@XmlElement(required=true)
@@ -100,16 +99,7 @@ public class ParametrosAutorizacao extends Parametros {
 
 
 
-	public String getBandeira() {
-		return bandeira;
-	}
-
-
-
-
-	public void setBandeira(String bandeira) {
-		this.bandeira = bandeira;
-	}
+	
 
 
 

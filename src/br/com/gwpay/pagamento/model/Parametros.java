@@ -19,7 +19,8 @@ public class Parametros {
 	private double valor;
 	@XmlElement(required=false)
 	private String codRastreio; //trackId
-
+	@XmlElement(required=true)
+	private String bandeira;
 
 	
 	public Parametros(){
@@ -82,6 +83,15 @@ public class Parametros {
 		this.valor = valor;
 	}
 	
-	
+	public String getBandeira() {
+		return bandeira;
+	}
+
+
+
+
+	public void setBandeira(String bandeira) {
+		this.bandeira = bandeira;
+	}
 	
 }
