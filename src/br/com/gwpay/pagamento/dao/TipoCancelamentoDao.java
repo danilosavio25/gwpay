@@ -11,7 +11,7 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 
-public class ClienteDao {
+public class TipoCancelamentoDao {
 	
 	DataSource ds = null;
 	InitialContext ic = null;
@@ -28,8 +28,8 @@ public class ClienteDao {
 			 ds = (DataSource) ic.lookup("java:jboss/datasources/PostgreSQLDS");  
 			 connection = ds.getConnection();
 			 
-			 
-			/* String url = "jdbc:postgresql://localhost:5432/GWPayBD";  
+		/*	 
+			 String url = "jdbc:postgresql://localhost:5432/GWPayBD";  
 			 String usuario = "GWPayAdminBD";  
 			 String senha = "GWPayAdminBD00";
 			 
@@ -56,8 +56,7 @@ public class ClienteDao {
 		
 	}
 
-	
-	public int getClienteId(String codGWPay){
+	public int getTipoCancelamentoId(String descricao){
 		
 		try {
 			
@@ -65,10 +64,10 @@ public class ClienteDao {
 			System.out.println("after getconn");
 			PreparedStatement pstmt;
 			
-			pstmt = conn.prepareStatement("SELECT ID FROM CLIENTE  WHERE COD_GWPAY = ? AND FLG_ATIVO = true");
+			pstmt = conn.prepareStatement("SELECT ID FROM TIPO_CANCELAMENTO WHERE DESCRICAO = ?");
 										
 
-			pstmt.setString(1, codGWPay);
+			pstmt.setString(1,descricao);
 		
 
 			ResultSet rs = pstmt.executeQuery();

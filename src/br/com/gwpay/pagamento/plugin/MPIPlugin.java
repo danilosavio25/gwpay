@@ -300,7 +300,12 @@ public class MPIPlugin {
 	
 	public static void main(String[] args) {
 		MPIPlugin m = new MPIPlugin();
-		m.realizarDebito(null);
+		Parametros params = new Parametros();
+		params.setCodCliente("D087729102");
+		params.setCodNSU("7082093371153010");
+		params.setValor(50); 
+				
+		m.realizarCancelamento(params);
 	}
 	public void realizarCreditoAutenticacao(ParametrosAutenticacao params){
 		

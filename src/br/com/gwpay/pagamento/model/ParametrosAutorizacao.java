@@ -13,6 +13,8 @@ public class ParametrosAutorizacao extends Parametros {
 	@XmlElement(required=true)
 	private String numCartao;
 	@XmlElement(required=true)
+	private String bandeira;
+	@XmlElement(required=true)
 	private String nomePortador;
 	@XmlElement(required=true)
 	private int mesVencimento;
@@ -40,7 +42,14 @@ public class ParametrosAutorizacao extends Parametros {
 		this.numCartao = numCartao;
 	}
 
+	public String getBandeira() {
+		return bandeira;
+	}
 
+
+	public void setBandeira(String bandeira) {
+		this.bandeira = bandeira;
+	}
 
 
 	public int getAnoVencimento() {
