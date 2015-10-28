@@ -300,12 +300,12 @@ public class MPIPlugin {
 	
 	public static void main(String[] args) {
 		MPIPlugin m = new MPIPlugin();
-		Parametros params = new Parametros();
-		params.setCodCliente("D087729102");
-		params.setCodNSU("7082093371153010");
-		params.setValor(50); 
+		/*Parametros params = new Parametros();
+		params.setCodCliente("D087729101");
+		params.setCodNSU("1654812231453011");
+		params.setValor(300);*/
 				
-		m.realizarCancelamento(params);
+		m.realizarDebito(null);
 	}
 	public void realizarCreditoAutenticacao(ParametrosAutenticacao params){
 		
@@ -350,7 +350,7 @@ public class MPIPlugin {
 		plugin.setTransactionType("TranPortal");
 		plugin.setVersion("1");
 		plugin.set("action" , "9");
-		plugin.set("type" , "CC");
+		plugin.set("type" , "");
 		plugin.set("transid" , params.getCodNSU());
 		plugin.set("trackid" , params.getCodRastreio());
 		plugin.set("amt" , params.getValor() + "");
