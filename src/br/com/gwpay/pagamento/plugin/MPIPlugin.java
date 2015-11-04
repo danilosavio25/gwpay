@@ -1,24 +1,40 @@
 package br.com.gwpay.pagamento.plugin;
 
+import java.net.URL;
 import java.util.HashMap;
+
+import javax.servlet.ServletContext;
+import javax.ws.rs.core.Application;
 
 import com.aciworldwide.commerce.gateway.plugins.UniversalPlugin;
 
-import br.com.gwpay.pagamento.exception.AdquirenteException;
-import br.com.gwpay.pagamento.exception.GWPayException;
 import br.com.gwpay.pagamento.model.Parametros;
 import br.com.gwpay.pagamento.model.ParametrosAutenticacao;
 import br.com.gwpay.pagamento.model.ParametrosAutorizacao;
-import br.com.gwpay.pagamento.ws.PagamentoWS;
 
 public class MPIPlugin {
+	
+/*	public static void main(String[] args) {
+		MPIPlugin m = new MPIPlugin();
+		Parametros params = new Parametros();
+		params.setCodCliente("D087729101");
+		params.setCodNSU("	");
+		params.setValor(300);
+	
+
+		m.realizarConsultaTransacao(params);
+	
+	}*/
 	
 	public HashMap realizarConsultaTransacao(Parametros params){
 		//D087729102
 
+		
+		String path = getPath();
+		
 		UniversalPlugin plugin = new UniversalPlugin();
 		
-		plugin.setResourcePath("/resourceGetNet");
+		plugin.setResourcePath(path);
 		plugin.setTerminalAlias(params.getCodCliente());
 		plugin.setTransactionType("TranPortal");
 		plugin.setVersion("1");
@@ -66,11 +82,11 @@ public class MPIPlugin {
 	}
 	
 	public HashMap realizarCreditoCompleto(ParametrosAutorizacao params){
-	
+
+		String path = getPath();
 		
 		UniversalPlugin plugin = new UniversalPlugin();
-		
-		plugin.setResourcePath("/resourceGetNet");
+		plugin.setResourcePath(path);
 		plugin.setTerminalAlias(params.getCodCliente());
 		plugin.setTransactionType("TranPortal");
 		plugin.setVersion("1");
@@ -128,10 +144,10 @@ public class MPIPlugin {
 	
 	public HashMap realizarCreditoAutorizacao(ParametrosAutorizacao params){
 	
+		String path = getPath();
 		
 		UniversalPlugin plugin = new UniversalPlugin();
-		
-		plugin.setResourcePath("/resourceGetNet");
+		plugin.setResourcePath(path);
 		plugin.setTerminalAlias(params.getCodCliente());
 		plugin.setTransactionType("TranPortal");
 		plugin.setVersion("1");
@@ -189,9 +205,10 @@ public class MPIPlugin {
 	
 	public HashMap realizarCreditoConfirmacao(Parametros params){
 		
-		UniversalPlugin plugin = new UniversalPlugin();
+		String path = getPath();
 		
-		plugin.setResourcePath("/resourceGetNet");
+		UniversalPlugin plugin = new UniversalPlugin();
+		plugin.setResourcePath(path);
 		plugin.setTerminalAlias(params.getCodCliente());
 		plugin.setTransactionType("TranPortal");
 		plugin.setVersion("1");
@@ -240,8 +257,10 @@ public class MPIPlugin {
 	
 	public HashMap realizarDebito(ParametrosAutenticacao params){
 		
+		String path = getPath();
+		
 		UniversalPlugin plugin = new UniversalPlugin();
-		plugin.setResourcePath("/resourceGetNet");
+		plugin.setResourcePath(path);
 		plugin.setTerminalAlias("E087729003");
 		plugin.setTransactionType("MPIVerifyEnrollment");
 		plugin.setVersion("1");
@@ -298,22 +317,14 @@ public class MPIPlugin {
 		
 	}
 	
-	public static void main(String[] args) {
-		MPIPlugin m = new MPIPlugin();
-		/*Parametros params = new Parametros();
-		params.setCodCliente("D087729101");
-		params.setCodNSU("1654812231453011");
-		params.setValor(300);*/
-				
-		m.realizarDebito(null);
-	}
 	public void realizarCreditoAutenticacao(ParametrosAutenticacao params){
 		
 	/*	String transId = autorizacao(trackId);
 		
-		UniversalPlugin plugin = new UniversalPlugin();
+			String path = getPath();
 		
-		plugin.setResourcePath("/resources");
+		UniversalPlugin plugin = new UniversalPlugin();
+		plugin.setResourcePath(path);
 		plugin.setTerminalAlias("D087729104");
 		plugin.setTransactionType("TranPortal");
 		plugin.setVersion("1");
@@ -343,9 +354,10 @@ public class MPIPlugin {
 	
 	public HashMap realizarCancelamento(Parametros params){
 		
-		UniversalPlugin plugin = new UniversalPlugin();
+		String path = getPath();
 		
-		plugin.setResourcePath("/resourceGetNet");
+		UniversalPlugin plugin = new UniversalPlugin();
+		plugin.setResourcePath(path);
 		plugin.setTerminalAlias(params.getCodCliente());
 		plugin.setTransactionType("TranPortal");
 		plugin.setVersion("1");
@@ -389,8 +401,15 @@ public class MPIPlugin {
 				
 			}
 		}
-		
+	}
 	
+	public String getPath(){
+		URL url = getClass().getResource("");
+		
+		System.out.println("url " + url);
+		
+		return url.getPath();
 	}
 	
 }
+
