@@ -84,7 +84,7 @@ public class GetNetService implements IPagamentoWS{
 				
 			//############################################ PLUGIN ############################################################	
 				// ### EXECUTA METODO DO PLUGIN ###
-				camposRetorno = plugin.realizarCreditoAutorizacao(params);
+				camposRetorno = plugin.realizarCreditoCompleto(params);
 			//############################################ RESULTADO ############################################################
 
 				ResultadoWS result = gerarResultadoAutorizacao(camposRetorno);
@@ -632,7 +632,11 @@ public class GetNetService implements IPagamentoWS{
 		transacao.setNomePortador(params.getNomePortador());
 		
 		if(camposRetorno.containsKey("tranid")){
-			transacao.setCodTransacaoOriginal(camposRetorno.get("tranid"));
+			if(camposRetorno.get("otranid").equals("-1")){
+				transacao.setCodTransacaoOriginal(camposRetorno.get("tranid"));
+			}else{
+				transacao.setCodTransacaoOriginal(camposRetorno.get("otranid"));
+			}
 			transacao.setCodNSU(camposRetorno.get("tranid"));
 			transacao.setDescricaoResposta(camposRetorno.get("result"));
 			transacao.setCodResposta(camposRetorno.get("responsecode"));
@@ -795,7 +799,7 @@ public class GetNetService implements IPagamentoWS{
 			
 			
 			if(camposRetorno.containsKey("tranid")){
-				transacao.setCodTransacaoOriginal(params.getCodNSU());
+				transacao.setCodTransacaoOriginal(camposRetorno.get("otranid"));
 				transacao.setCodNSU(camposRetorno.get("tranid"));
 				transacao.setDescricaoResposta(camposRetorno.get("result"));
 				transacao.setCodResposta(camposRetorno.get("responsecode"));
@@ -895,7 +899,7 @@ public class GetNetService implements IPagamentoWS{
 			transacao.setMoeda("986");			
 			
 			if(camposRetorno.containsKey("tranid")){
-				transacao.setCodTransacaoOriginal(camposRetorno.get("tranid"));
+				transacao.setCodTransacaoOriginal(camposRetorno.get("otranid"));
 				transacao.setCodNSU(camposRetorno.get("tranid"));
 				transacao.setDescricaoResposta(camposRetorno.get("result"));
 				transacao.setCodResposta(camposRetorno.get("responsecode"));
@@ -942,7 +946,7 @@ public class GetNetService implements IPagamentoWS{
 		
 		
 		if(camposRetorno.containsKey("tranid")){
-			transacao.setCodTransacaoOriginal(params.getCodNSU());
+			transacao.setCodTransacaoOriginal(camposRetorno.get("otranid"));
 			transacao.setCodNSU(camposRetorno.get("tranid"));
 			transacao.setDescricaoResposta(camposRetorno.get("result"));
 			transacao.setCodResposta(camposRetorno.get("responsecode"));
@@ -1041,7 +1045,7 @@ public class GetNetService implements IPagamentoWS{
 		transacao.setMoeda("986");			
 		
 		if(camposRetorno.containsKey("tranid")){
-			transacao.setCodTransacaoOriginal(camposRetorno.get("tranid"));
+			transacao.setCodTransacaoOriginal(camposRetorno.get("otranid"));
 			transacao.setCodNSU(camposRetorno.get("tranid"));
 			transacao.setDescricaoResposta(camposRetorno.get("result"));
 			transacao.setCodResposta(camposRetorno.get("responsecode"));

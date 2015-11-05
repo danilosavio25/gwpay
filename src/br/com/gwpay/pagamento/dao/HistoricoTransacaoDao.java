@@ -75,15 +75,15 @@ public class HistoricoTransacaoDao {
 						+"														num_pcl,num_cartao, mes_vct_cartao, ano_vct_cartao, nme_ptd_cartao,    	"
 						+"														udf1, udf2, udf3, udf4, udf5,                                          	"
 						+"														nsu_id, dat_trs, trs_original_id, dsc_resposta, cod_resposta,          	"
-						+"														cod_erro_gwy, dsc_erro_gwy, val_primeira_pcl, val_outras_pcl,val_total,	"
-						+"														taxa_juros, juros_ins_fin, cod_erro_ws, dsc_erro_ws,valor_cancelado,   	"
+						+"														val_primeira_pcl, val_outras_pcl,val_total,	"
+						+"														taxa_juros, juros_ins_fin, valor_cancelado,   	"
 						+"														tip_trs_id, cliente_id, bandeira_id, tip_cancelamento_id, cod_seguranca_cartao)              	"
 						+"					    VALUES (?, ?, ?, ?, ?,                                                                           	"
 						+"						    	?, ?, ?, ?, ?,                                                                               	"
 						+"						   	    ?, ?, ?, ?, ?,                                                                                	"
 						+"						   	    ?, current_timestamp, ?,?,?,                                                                 	"
-						+"						   	    ?, ?, ?, ?, ?,                                                                             	"
-						+"						   	    ?, ?, ?, ?, ?,                                                                             	"
+						+"						   	     ?, ?, ?,                                                                             	"
+						+"						   	    ?, ?,  ?,                                                                             	"
 						+"						    	?, ?, ?, ?,?);                                                                                    	";
 	
 				
@@ -121,21 +121,17 @@ public class HistoricoTransacaoDao {
 				pstmt.setString(17, transacao.getCodTransacaoOriginal());
 				pstmt.setString(18, transacao.getDescricaoResposta());
 				pstmt.setString(19, transacao.getCodResposta());
-				pstmt.setString(20, transacao.getCodErroGateway());
-				pstmt.setString(21, transacao.getDescricaoErroGateway());
-				pstmt.setDouble(22, transacao.getValorPrimeiraParcela());
-				pstmt.setDouble(23, transacao.getValorOutrasParcelas());
-				pstmt.setDouble(24, transacao.getValorTotal() );
-				pstmt.setDouble(25, transacao.getTaxaJuros());
-				pstmt.setDouble(26, transacao.getJurosInstFinanceira());
-				pstmt.setString(27, transacao.getCodErroWS());
-				pstmt.setString(28, transacao.getDescricaoErroWS());
-				pstmt.setDouble(29, transacao.getValorCancelado());
-				pstmt.setInt(30, transacao.getTipoTransacaoId());
-				pstmt.setInt(31, transacao.getClienteId());
-				pstmt.setInt(32, transacao.getBandeiraId());
-				pstmt.setInt(33, transacao.getTipoCancelamentoId());
-				pstmt.setString(34, transacao.getCodSegurancaCartao());
+				pstmt.setDouble(20, transacao.getValorPrimeiraParcela());
+				pstmt.setDouble(21, transacao.getValorOutrasParcelas());
+				pstmt.setDouble(22, transacao.getValorTotal() );
+				pstmt.setDouble(23, transacao.getTaxaJuros());
+				pstmt.setDouble(24, transacao.getJurosInstFinanceira());
+				pstmt.setDouble(25, transacao.getValorCancelado());
+				pstmt.setInt(26, transacao.getTipoTransacaoId());
+				pstmt.setInt(27, transacao.getClienteId());
+				pstmt.setInt(28, transacao.getBandeiraId());
+				pstmt.setInt(29, transacao.getTipoCancelamentoId());
+				pstmt.setString(30, transacao.getCodSegurancaCartao());
 
 	
 				

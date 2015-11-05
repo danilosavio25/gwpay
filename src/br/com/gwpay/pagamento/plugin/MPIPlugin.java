@@ -14,8 +14,8 @@ import br.com.gwpay.pagamento.model.ParametrosAutorizacao;
 
 public class MPIPlugin {
 	
-/*	public static void main(String[] args) {
-		MPIPlugin m = new MPIPlugin();
+	public static void main(String[] args) {
+		/*MPIPlugin m = new MPIPlugin();
 		Parametros params = new Parametros();
 		params.setCodCliente("D087729101");
 		params.setCodNSU("	");
@@ -23,8 +23,22 @@ public class MPIPlugin {
 	
 
 		m.realizarConsultaTransacao(params);
-	
-	}*/
+		//m.getPath();
+		
+		ParametrosAutorizacao params = new ParametrosAutorizacao();
+		params.setCodCliente("D087729101");
+		params.setNumCartao("4012001038166662");
+		params.setCodSegurancaCartao("456");
+		params.setAnoVencimento(2017);
+		params.setMesVencimento(04) ;
+		params.setNomePortador("JOAO SOUZA");
+		params.setValor(200);
+		params.setCodRastreio("000000011");
+		params.setTipoParcelamento("SGL");
+		params.setNumParcelas(1);
+		
+		m.realizarCreditoCompleto(params);*/
+	}
 	
 	public HashMap realizarConsultaTransacao(Parametros params){
 		//D087729102
@@ -69,6 +83,7 @@ public class MPIPlugin {
 				
 				camposRetorno.put("result", plugin.get("result"));
 				camposRetorno.put("responsecode", plugin.get("responsecode"));
+				camposRetorno.put("otranid", plugin.get("otranid"));
 				camposRetorno.put("tranid", plugin.get("tranid"));
 				camposRetorno.put("trackid", plugin.get("trackid"));
 				camposRetorno.put("postdate", plugin.get("postdate"));
@@ -83,7 +98,22 @@ public class MPIPlugin {
 	
 	public HashMap realizarCreditoCompleto(ParametrosAutorizacao params){
 
+		System.out.println(params.getCodCliente());
+		System.out.println(params.getNumCartao());
+		System.out.println(params.getCodSegurancaCartao());
+		System.out.println(params.getAnoVencimento());
+		System.out.println(params.getMesVencimento() );
+		System.out.println(params.getNomePortador());
+		System.out.println(params.getValor());
+		System.out.println(params.getCodRastreio());
+		System.out.println(params.getTipoParcelamento());
+		System.out.println(params.getNumParcelas());
+
+		
 		String path = getPath();
+		
+		//String path = "\\resourceGetNet";
+		System.out.println(path);
 		
 		UniversalPlugin plugin = new UniversalPlugin();
 		plugin.setResourcePath(path);
@@ -95,7 +125,7 @@ public class MPIPlugin {
 		plugin.set("expyear" , params.getAnoVencimento() + "");
 		plugin.set("expmonth" , params.getMesVencimento() + "");
 		plugin.set("action" , "1");
-		plugin.set("type" , "");
+		plugin.set("type" , "CC");
 		plugin.set("transid" , "");
 		plugin.set("member" , params.getNomePortador());
 		plugin.set("amt" , params.getValor() + "");
@@ -103,7 +133,6 @@ public class MPIPlugin {
 		plugin.set("trackid" , params.getCodRastreio());
 		plugin.set("instType" , params.getTipoParcelamento());
 		plugin.set("instNum" , params.getNumParcelas() + "");
-		
 		
 		HashMap camposRetorno = new HashMap<String, String>();
 		
@@ -130,6 +159,7 @@ public class MPIPlugin {
 				
 				camposRetorno.put("result", plugin.get("result"));
 				camposRetorno.put("responsecode", plugin.get("responsecode"));
+				camposRetorno.put("otranid", plugin.get("otranid"));
 				camposRetorno.put("tranid", plugin.get("tranid"));
 				camposRetorno.put("trackid", plugin.get("trackid"));
 				camposRetorno.put("postdate", plugin.get("postdate"));
@@ -148,6 +178,7 @@ public class MPIPlugin {
 		
 		UniversalPlugin plugin = new UniversalPlugin();
 		plugin.setResourcePath(path);
+		
 		plugin.setTerminalAlias(params.getCodCliente());
 		plugin.setTransactionType("TranPortal");
 		plugin.setVersion("1");
@@ -191,6 +222,7 @@ public class MPIPlugin {
 				
 				camposRetorno.put("result", plugin.get("result"));
 				camposRetorno.put("responsecode", plugin.get("responsecode"));
+				camposRetorno.put("otranid", plugin.get("otranid"));
 				camposRetorno.put("tranid", plugin.get("tranid"));
 				camposRetorno.put("trackid", plugin.get("trackid"));
 				camposRetorno.put("postdate", plugin.get("postdate"));
@@ -244,6 +276,7 @@ public class MPIPlugin {
 				
 				camposRetorno.put("result", plugin.get("result"));
 				camposRetorno.put("responsecode", plugin.get("responsecode"));
+				camposRetorno.put("otranid", plugin.get("otranid"));
 				camposRetorno.put("tranid", plugin.get("tranid"));
 				camposRetorno.put("trackid", plugin.get("trackid"));
 				camposRetorno.put("postdate", plugin.get("postdate"));
@@ -305,7 +338,7 @@ public class MPIPlugin {
 				
 			} else{
 				System.out.println( "Codigo Resposta : " + plugin.get("result") );
-				System.out.println( "Resposta : " + plugin.get("responsecode"));
+				System.out.println( "Resposta : " + plugin.get("responsecode"));	
 				System.out.println( "tranid : " + plugin.get("tranid"));
 				System.out.println(plugin.getResponseFields());
 				
@@ -393,6 +426,7 @@ public class MPIPlugin {
 				
 				camposRetorno.put("result", plugin.get("result"));
 				camposRetorno.put("responsecode", plugin.get("responsecode"));
+				camposRetorno.put("otranid", plugin.get("otranid"));
 				camposRetorno.put("tranid", plugin.get("tranid"));
 				camposRetorno.put("trackid", plugin.get("trackid"));
 				camposRetorno.put("postdate", plugin.get("postdate"));
@@ -405,10 +439,14 @@ public class MPIPlugin {
 	
 	public String getPath(){
 		URL url = getClass().getResource("");
-		
+		String sUrl = "";
 		System.out.println("url " + url);
 		
-		return url.getPath();
+		String path = System.getProperty("jboss.home.dir");
+		sUrl = path + "\\standalone\\deployments\\pagamentows.war\\WEB-INF\\classes\\br\\com\\gwpay\\pagamento\\plugin";
+		System.out.println("path:" +  sUrl);
+		
+		return sUrl;
 	}
 	
 }
