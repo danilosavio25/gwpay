@@ -105,17 +105,9 @@ public class PagamentoWS {
 	
 	@WebMethod(operationName="consultaTransacao")
 	@WebResult(name="resultadoWS")
-	public ResultadoWS realizarConsultaTransacao(@WebParam(name="autenticacaoUsuario", header=true) Usuario usuario, @XmlElement(required=true) @WebParam(name="parametros") Parametros params) throws AdquirenteException, GWPayException{
-		//### Autenticação ###
-		UsuarioDao uDao = new UsuarioDao();
-		int usuarioId = uDao.autenticar(usuario.getLogin(), usuario.getSenha());
-		if(usuarioId == 0 ){
-			GWPayException exception = new GWPayException("Login inválido.");
-			exception.setInfoFault("GW04", "Login Inválido" , "Usuário e/ou senha inválidos." , "Favor verificar seu usuário e senha.");
-			throw exception;
-		}
+	public ResultadoWS realizarConsultaTransacao(@WebParam(name="token", header=true) String token, @XmlElement(required=true) @WebParam(name="parametros") Parametros params) throws AdquirenteException, GWPayException{
 		IPagamentoWS service = new GetNetService();
-		return service.realizarConsultaTransacao(params);
+		return service.realizarConsultaTransacao(token, params);
 	}
 	
 	@WebMethod(operationName="cancelamento")

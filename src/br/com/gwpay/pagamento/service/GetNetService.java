@@ -2,6 +2,7 @@ package br.com.gwpay.pagamento.service;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 import br.com.gwpay.pagamento.dao.BandeiraDao;
@@ -10,8 +11,10 @@ import br.com.gwpay.pagamento.dao.ErroAdquirenteDao;
 import br.com.gwpay.pagamento.dao.HistoricoTransacaoDao;
 import br.com.gwpay.pagamento.dao.HistoricoTransacaoErroDao;
 import br.com.gwpay.pagamento.dao.OperacaoDao;
+import br.com.gwpay.pagamento.dao.SessaoDao;
 import br.com.gwpay.pagamento.dao.TipoCancelamentoDao;
 import br.com.gwpay.pagamento.dao.TipoTransacaoDao;
+import br.com.gwpay.pagamento.dao.UsuarioDao;
 import br.com.gwpay.pagamento.exception.AdquirenteException;
 import br.com.gwpay.pagamento.exception.GWPayException;
 import br.com.gwpay.pagamento.model.HistoricoTransacao;
@@ -19,6 +22,7 @@ import br.com.gwpay.pagamento.model.HistoricoTransacaoErro;
 import br.com.gwpay.pagamento.model.Parametros;
 import br.com.gwpay.pagamento.model.ParametrosAutorizacao;
 import br.com.gwpay.pagamento.model.ResultadoWS;
+import br.com.gwpay.pagamento.model.Sessao;
 import br.com.gwpay.pagamento.plugin.MPIPlugin;
 
 public class GetNetService implements IPagamentoWS{
@@ -373,7 +377,7 @@ public class GetNetService implements IPagamentoWS{
 	}
 
 	@Override
-	public ResultadoWS realizarConsultaTransacao(Parametros params) throws AdquirenteException, GWPayException{
+	public ResultadoWS realizarConsultaTransacao(String token, Parametros params) throws AdquirenteException, GWPayException{
 		
 		MPIPlugin plugin = new MPIPlugin();
 	//############################################ CAMPOS OBRIGATÓRIOS ###########################################	
@@ -381,13 +385,26 @@ public class GetNetService implements IPagamentoWS{
 		// ### Verifica campos obrigatórios
 		if((params.getCodCliente().equals("") || params.getCodCliente() == null) ||
 			(params.getCodGWPay().equals("") || params.getCodGWPay() == null) ||
-			(params.getCodNSU().equals("") || params.getCodNSU() == null)){
+			(params.getCodNSU().equals("") || params.getCodNSU() == null) ||
+			(token.equals("") || token == null)){
 			
 			GWPayException exception = new GWPayException("Parâmetros Obrigatórios.");
 			exception.setInfoFault("GW00", "Há um ou mais Parâmetros obrigatórios faltando." , "Há um ou mais Parâmetros obrigatórios faltando." , "Favor verificar os parâmetros");
 			throw exception;
 			
 		}
+	
+	//############################################ AUTENTICACAO ###########################################
+				SessaoDao sDao = new SessaoDao();
+				Sessao sessao = sDao.getSessao(token);
+				boolean sessaoValida = validarSessao(sessao); 
+				if(sessao == null || sessaoValida == false){
+					GWPayException exception = new GWPayException("Token inválido.");
+					exception.setInfoFault("GW04", "Token Inválido" , "Token de acesso inválido." , "Favor verificar seu Token, sua validade pode ter expirado.");
+					throw exception;
+				}
+		
+		
 	//############################################ DADOS ####################################################	
 
 		String terminalIdComposto = "";
@@ -1080,5 +1097,25 @@ public class GetNetService implements IPagamentoWS{
 		
 	}
 
+	private boolean validarSessao(Sessao sessao){
+		
+		if(sessao == null || sessao.getDataExpiracao() == null) return false;
+		
+		// ### Gera as datas de sessão ###
+		Date data =  new Date();
+		Timestamp dataHoje = new Timestamp(data.getTime());
+		
+		System.out.println("dataExpiracao " + sessao.getDataExpiracao());
+		System.out.println("dataHoje " + dataHoje);
+		
+		if( dataHoje.getTime() > sessao.getDataExpiracao().getTime() ){
+			SessaoDao sDao = new SessaoDao();
+			sDao.deletarSessao(sessao.getToken());
+			return false;
+		}
+		
+		return true;
+	}
+	
 	
 }

@@ -18,7 +18,7 @@ public interface IPagamentoWS {
 	
 	public String realizarCreditoAutenticacao();
 	
-	public ResultadoWS realizarConsultaTransacao(Parametros params) throws AdquirenteException, GWPayException;
+	public ResultadoWS realizarConsultaTransacao(String token, Parametros params) throws AdquirenteException, GWPayException;
 	
 	public ResultadoWS realizarCancelamento(Parametros params) throws AdquirenteException, GWPayException;
 	
