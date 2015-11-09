@@ -197,6 +197,50 @@ public class HistoricoTransacaoDao {
 	
 	}
 	
+	public HashMap getBandeiraTransacaoOriginal(String codNSUTransacaoOriginal){
+		
+		try {
+			
+			Connection conn = getConnection();
+			System.out.println("after getconn");
+			PreparedStatement pstmt;
+			
+			pstmt = conn.prepareStatement("SELECT H.BANDEIRA_ID as BANDEIRA_ID, B.NOME AS NOME FROM HISTORICO_TRANSACAO H "
+										  +"JOIN BANDEIRA B ON H.BANDEIRA_ID = B.ID "
+										  +"AND H.TRS_ORIGINAL_ID = ? "
+										  +"AND H.TIP_TRS_ID <> 8 ");
+	
+			//'2292945311652751'
+			pstmt.setString(1,codNSUTransacaoOriginal);
+			
+	
+			ResultSet rs = pstmt.executeQuery();
+				
+			
+			HashMap camposRetorno = new HashMap<String, String>();
+			camposRetorno.put("bandeira_id", "");
+			camposRetorno.put("nome", "");
+			while (rs.next()) {
+				camposRetorno.put("bandeira_id", rs.getString("bandeira_id"));
+				camposRetorno.put("nome", rs.getString("nome"));
+				break;
+			}
+			
+			rs.close();
+	
+			pstmt.close();
+			conn.close();
+			
+			return camposRetorno;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		return null;
+	
+	}
+	
 	public Timestamp getDataTransacao(String codNSU){
 		
 		try {

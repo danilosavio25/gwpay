@@ -512,7 +512,7 @@ public class GetNetService implements IPagamentoWS{
 			//### TRY TRATA AS EXCECOES SQL E DE ERRO DE CONEXAO DO PLUGIN ###
 			try {
 				HistoricoTransacaoDao hDao = new HistoricoTransacaoDao();
-				camposRetornoBandeira = hDao.getBandeiraTransacao(params.getCodNSU());
+				camposRetornoBandeira = hDao.getBandeiraTransacaoOriginal(params.getCodNSU());
 				
 				if(camposRetornoBandeira.get("bandeira_id").equals("")){
 					//@EXCEPTION CRIAR CÓDIGO
@@ -529,7 +529,7 @@ public class GetNetService implements IPagamentoWS{
 				
 				// ### Busca o ID do tipoTransacao no banco de dados ####	
 				TipoTransacaoDao trDao = new TipoTransacaoDao();
-				tipoTransacaoId =  trDao.getTipoTransacaoId("CAPTURA");
+				tipoTransacaoId =  trDao.getTipoTransacaoId("CANCELAMENTO");
 				
 				TipoCancelamentoDao caDao = new TipoCancelamentoDao();
 				cancelamentoId = caDao.getTipoCancelamentoId("WS");
