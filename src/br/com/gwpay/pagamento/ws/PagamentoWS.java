@@ -1,5 +1,6 @@
 package br.com.gwpay.pagamento.ws;
 
+import javax.jws.HandlerChain;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
@@ -10,6 +11,7 @@ import javax.jws.soap.SOAPBinding.Style;
 import javax.jws.soap.SOAPBinding.Use;
 import javax.xml.bind.annotation.XmlElement;
 
+import br.com.gwpay.pagamento.autenticacao.Autenticacao;
 import br.com.gwpay.pagamento.dao.UsuarioDao;
 import br.com.gwpay.pagamento.exception.AdquirenteException;
 import br.com.gwpay.pagamento.exception.GWPayException;
@@ -22,36 +24,39 @@ import br.com.gwpay.pagamento.service.IPagamentoWS;
 
 @WebService
 @SOAPBinding(style=Style.DOCUMENT, use=Use.LITERAL, parameterStyle=ParameterStyle.WRAPPED)
+//@HandlerChain(file="../autenticacao/autenticacao-handler.xml")
 public class PagamentoWS {
-	
+	 
 	
 	
 	@WebMethod(operationName="creditoCompleto")
 	@WebResult(name="resultadoWS")
-	public ResultadoWS realizarCredito(@WebParam(name="autenticacaoUsuario", header=true) Usuario usuario, @XmlElement(required=true) @WebParam(name="parametros") ParametrosAutorizacao params) throws AdquirenteException, GWPayException{
-		//### Autenticação ###
+	public ResultadoWS realizarCredito(@WebParam(name="token", header=true) String token, @XmlElement(required=true) @WebParam(name="parametros") ParametrosAutorizacao params) throws AdquirenteException, GWPayException{
+		/*//### Autenticação ###
 		UsuarioDao uDao = new UsuarioDao();
 		int usuarioId = uDao.autenticar(usuario.getLogin(), usuario.getSenha());
 		if(usuarioId == 0 ){
 			GWPayException exception = new GWPayException("Login inválido.");
 			exception.setInfoFault("GW04", "Login Inválido" , "Usuário e/ou senha inválidos." , "Favor verificar seu usuário e senha.");
 			throw exception;
-		}
+		}*/
+		
+		//### Autenticação ###
+		Autenticacao autenticacao = new Autenticacao();
+		autenticacao.autenticar(token);
+		
+		
 		IPagamentoWS service = new GetNetService();
 		return service.realizarCreditoCompleto(params);
 	}
 	
 	@WebMethod(operationName="creditoAutorizacao")
 	@WebResult(name="resultadoWS")
-	public ResultadoWS realizarCreditoAutorizacao(@WebParam(name="autenticacaoUsuario", header=true) Usuario usuario, @XmlElement(required=true) @WebParam(name="parametros") ParametrosAutorizacao params) throws AdquirenteException, GWPayException{
+	public ResultadoWS realizarCreditoAutorizacao(@WebParam(name="token", header=true) String token, @XmlElement(required=true) @WebParam(name="parametros") ParametrosAutorizacao params) throws AdquirenteException, GWPayException{
 		//### Autenticação ###
-		UsuarioDao uDao = new UsuarioDao();
-		int usuarioId = uDao.autenticar(usuario.getLogin(), usuario.getSenha());
-		if(usuarioId == 0 ){
-			GWPayException exception = new GWPayException("Login inválido.");
-			exception.setInfoFault("GW04", "Login Inválido" , "Usuário e/ou senha inválidos." , "Favor verificar seu usuário e senha.");
-			throw exception;
-		}
+		Autenticacao autenticacao = new Autenticacao();
+		autenticacao.autenticar(token);
+		
 		IPagamentoWS service = new GetNetService();
 		return service.realizarCreditoAutorizacao(params);
 	}
@@ -60,45 +65,33 @@ public class PagamentoWS {
 	
 	@WebMethod(operationName="creditoConfirmacao")
 	@WebResult(name="resultadoWS")
-	public ResultadoWS realizarCreditoConfirmacao(@WebParam(name="autenticacaoUsuario", header=true) Usuario usuario, @XmlElement(required=true) @WebParam(name="parametros") Parametros params) throws AdquirenteException, GWPayException{
+	public ResultadoWS realizarCreditoConfirmacao(@WebParam(name="token", header=true) String token, @XmlElement(required=true) @WebParam(name="parametros") Parametros params) throws AdquirenteException, GWPayException{
 		//### Autenticação ###
-		UsuarioDao uDao = new UsuarioDao();
-		int usuarioId = uDao.autenticar(usuario.getLogin(), usuario.getSenha());
-		if(usuarioId == 0 ){
-			GWPayException exception = new GWPayException("Login inválido.");
-			exception.setInfoFault("GW04", "Login Inválido" , "Usuário e/ou senha inválidos." , "Favor verificar seu usuário e senha.");
-			throw exception;
-		}
+		Autenticacao autenticacao = new Autenticacao();
+		autenticacao.autenticar(token);
+				
 		IPagamentoWS service = new GetNetService();
 		return service.realizarCreditoConfirmacao(params);
 	}
 	
 	@WebMethod(operationName="debito")
 	@WebResult(name="resultadoWS")
-	public String realizarDebito(@WebParam(name="autenticacaoUsuario", header=true) Usuario usuario) throws AdquirenteException, GWPayException{
+	public String realizarDebito(@WebParam(name="token", header=true) String token) throws AdquirenteException, GWPayException{
 		//### Autenticação ###
-		UsuarioDao uDao = new UsuarioDao();
-		int usuarioId = uDao.autenticar(usuario.getLogin(), usuario.getSenha());
-		if(usuarioId == 0 ){
-			GWPayException exception = new GWPayException("Login inválido.");
-			exception.setInfoFault("GW04", "Login Inválido" , "Usuário e/ou senha inválidos." , "Favor verificar seu usuário e senha.");
-			throw exception;
-		}
+		Autenticacao autenticacao = new Autenticacao();
+		autenticacao.autenticar(token);
+				
 		IPagamentoWS service = new GetNetService();
 		return service.realizarDebito();
 	}
 	
 	@WebMethod(operationName="creditoAutenticacao")
 	@WebResult(name="resultadoWS")
-	public String realizarCreditoAutenticacao(@WebParam(name="autenticacaoUsuario", header=true) Usuario usuario) throws AdquirenteException, GWPayException{
+	public String realizarCreditoAutenticacao(@WebParam(name="token", header=true) String token) throws AdquirenteException, GWPayException{
 		//### Autenticação ###
-		UsuarioDao uDao = new UsuarioDao();
-		int usuarioId = uDao.autenticar(usuario.getLogin(), usuario.getSenha());
-		if(usuarioId == 0 ){
-			GWPayException exception = new GWPayException("Login inválido.");
-			exception.setInfoFault("GW04", "Login Inválido" , "Usuário e/ou senha inválidos." , "Favor verificar seu usuário e senha.");
-			throw exception;
-		}
+		Autenticacao autenticacao = new Autenticacao();
+		autenticacao.autenticar(token);
+		
 		IPagamentoWS service = new GetNetService();
 		return service.realizarDebito();
 	}
@@ -106,21 +99,21 @@ public class PagamentoWS {
 	@WebMethod(operationName="consultaTransacao")
 	@WebResult(name="resultadoWS")
 	public ResultadoWS realizarConsultaTransacao(@WebParam(name="token", header=true) String token, @XmlElement(required=true) @WebParam(name="parametros") Parametros params) throws AdquirenteException, GWPayException{
+		//### Autenticação ###
+		Autenticacao autenticacao = new Autenticacao();
+		autenticacao.autenticar(token);
+		
 		IPagamentoWS service = new GetNetService();
-		return service.realizarConsultaTransacao(token, params);
+		return service.realizarConsultaTransacao(params);
 	}
 	
 	@WebMethod(operationName="cancelamento")
 	@WebResult(name="resultadoWS")
-	public ResultadoWS realizarCancelamento(@WebParam(name="autenticacaoUsuario", header=true) Usuario usuario, @XmlElement(required=true) @WebParam(name="parametros") Parametros params) throws AdquirenteException, GWPayException{
+	public ResultadoWS realizarCancelamento(@WebParam(name="token", header=true) String token, @XmlElement(required=true) @WebParam(name="parametros") Parametros params) throws AdquirenteException, GWPayException{
 		//### Autenticação ###
-		UsuarioDao uDao = new UsuarioDao();
-		int usuarioId = uDao.autenticar(usuario.getLogin(), usuario.getSenha());
-		if(usuarioId == 0 ){
-			GWPayException exception = new GWPayException("Login inválido.");
-			exception.setInfoFault("GW04", "Login Inválido" , "Usuário e/ou senha inválidos." , "Favor verificar seu usuário e senha.");
-			throw exception;
-		}
+		Autenticacao autenticacao = new Autenticacao();
+		autenticacao.autenticar(token);
+				
 		IPagamentoWS service = new GetNetService();
 		return service.realizarCancelamento(params);
 	}
