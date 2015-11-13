@@ -125,7 +125,7 @@ public class GetNetService implements IPagamentoWS{
 				
 				//@EXCEPTION CRIAR CÓDIGO
 				GWPayException exception = new GWPayException("Erro de conexão.");
-				exception.setInfoFault("GW00", "Erro de conexão" , "Ocorreu um erro de conexão no sistema GWPay." , "Favor entar em contato com a GWPay");
+				exception.setInfoFault("GW00", "Erro de conexão" , "Ocorreu um erro de conexão no sistema GWPay." , "Caso o erro persista, favor entrar em contato com a GWPay");
 				
 				// ##### Salva histórico de erros ########
 				HistoricoTransacaoErro transacao = gerarHistoricoErroAutorizacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId);
@@ -238,7 +238,7 @@ public class GetNetService implements IPagamentoWS{
 			
 			//@EXCEPTION CRIAR CÓDIGO
 			GWPayException exception = new GWPayException("Erro de conexão.");
-			exception.setInfoFault("GW00", "Erro de conexão" , "Ocorreu um erro de conexão no sistema GWPay." , "Favor entar em contato com a GWPay");
+			exception.setInfoFault("GW00", "Erro de conexão" , "Ocorreu um erro de conexão no sistema GWPay." , "Caso o erro persista, favor entrar em contato com a GWPay");
 			
 			// ##### Salva histórico de erros ########
 			HistoricoTransacaoErro transacao = gerarHistoricoErroAutorizacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId);
@@ -357,7 +357,7 @@ public class GetNetService implements IPagamentoWS{
 			
 			//@EXCEPTION CRIAR CÓDIGO
 			GWPayException exception = new GWPayException("Erro de conexão.");
-			exception.setInfoFault("GW00", "Erro de conexão" , "Ocorreu um erro de conexão no sistema GWPay." , "Favor entar em contato com a GWPay");
+			exception.setInfoFault("GW00", "Erro de conexão" , "Ocorreu um erro de conexão no sistema GWPay." , "Caso o erro persista, favor entrar em contato com a GWPay");
 			
 			// ##### Salva histórico de erros ########
 			HistoricoTransacaoErro transacao = gerarHistoricoErroConfirmacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId);
@@ -388,7 +388,7 @@ public class GetNetService implements IPagamentoWS{
 			(params.getCodNSU().equals("") || params.getCodNSU() == null)){
 			
 			GWPayException exception = new GWPayException("Parâmetros Obrigatórios.");
-			exception.setInfoFault("GW00", "Há um ou mais Parâmetros obrigatórios faltando." , "Há um ou mais Parâmetros obrigatórios faltando." , "Favor verificar os parâmetros");
+			exception.setInfoFault("GW00", "Parâmetro faltando." , "Há um ou mais Parâmetros obrigatórios faltando." , "Favor verificar os parâmetros");
 			throw exception;
 			
 		}
@@ -482,7 +482,7 @@ public class GetNetService implements IPagamentoWS{
 			e.printStackTrace();
 			//@EXCEPTION CRIAR CÓDIGO
 			GWPayException exception = new GWPayException("Erro de conexão.");
-			exception.setInfoFault("GW00", "Erro de conexão" , "Ocorreu um erro de conexão no sistema GWPay." , "Favor entar em contato com a GWPay");
+			exception.setInfoFault("GW00", "Erro de conexão" , "Ocorreu um erro de conexão no sistema GWPay." , "Caso o erro persista, favor entrar em contato com a GWPay");
 			throw exception;
 		}
 		
@@ -599,7 +599,7 @@ public class GetNetService implements IPagamentoWS{
 				
 				//@EXCEPTION CRIAR CÓDIGO
 				GWPayException exception = new GWPayException("Erro de conexão.");
-				exception.setInfoFault("GW00", "Erro de conexão" , "Ocorreu um erro de conexão no sistema GWPay." , "Favor entar em contato com a GWPay");
+				exception.setInfoFault("GW00", "Erro de conexão" , "Ocorreu um erro de conexão no sistema GWPay." , "Caso o erro persista, favor entrar em contato com a GWPay");
 				
 				// ##### Salva histórico de erros ########
 				HistoricoTransacaoErro transacao = gerarHistoricoErroCancelamento(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId);
@@ -689,7 +689,7 @@ public class GetNetService implements IPagamentoWS{
 				(params.getCodSegurancaCartao().equals("") || params.getCodSegurancaCartao() == null)){
 				
 				GWPayException exception = new GWPayException("Parâmetros Obrigatórios.");
-				exception.setInfoFault("GW00", "Há um ou mais Parâmetros obrigatórios faltando." , "Há um ou mais Parâmetros obrigatórios faltando." , "Favor verificar os parâmetros");
+				exception.setInfoFault("GW00", "Parâmetro faltando." , "Há um ou mais Parâmetros obrigatórios faltando." , "Favor verificar os parâmetros");
 				// ##### Salva histórico de erros ########
 				HistoricoTransacaoErro transacao = gerarHistoricoErroAutorizacao(params, null, new HashMap(), 0, 0, 0);
 				transacao.setCodNSU(params.getCodNSU());
@@ -847,7 +847,7 @@ public class GetNetService implements IPagamentoWS{
 					(params.getValor() == 0)){
 					
 					GWPayException exception = new GWPayException("Parâmetros Obrigatórios.");
-					exception.setInfoFault("GW00", "Há um ou mais Parâmetros obrigatórios faltando." , "Há um ou mais Parâmetros obrigatórios faltando." , "Favor verificar os parâmetros");
+					exception.setInfoFault("GW00", "Parâmetro faltando." , "Há um ou mais Parâmetros obrigatórios faltando." , "Favor verificar os parâmetros");
 					// ##### Salva histórico de erros ########
 					HistoricoTransacaoErro transacao = gerarHistoricoErroConfirmacao(params, null, new HashMap(), 0, 0, 0);
 					transacao.setCodNSU(params.getCodNSU());
@@ -993,7 +993,7 @@ public class GetNetService implements IPagamentoWS{
 				(params.getValor() == 0)){
 				
 				GWPayException exception = new GWPayException("Parâmetros Obrigatórios.");
-				exception.setInfoFault("GW00", "Há um ou mais Parâmetros obrigatórios faltando." , "Há um ou mais Parâmetros obrigatórios faltando." , "Favor verificar os parâmetros");
+				exception.setInfoFault("GW00", "Parâmetro faltando." , "Há um ou mais Parâmetros obrigatórios faltando." , "Favor verificar os parâmetros");
 				// ##### Salva histórico de erros ########
 				HistoricoTransacaoErro transacao = gerarHistoricoErroCancelamento(params, null, new HashMap(), 0, 0, 0);
 				transacao.setCodNSU(params.getCodNSU());

@@ -18,7 +18,7 @@ public class Autenticacao {
 		boolean sessaoValida = validarSessao(sessao); 
 		if(sessao == null || sessaoValida == false){
 			GWPayException exception = new GWPayException("Token inválido.");
-			exception.setInfoFault("GW04", "Token Inválido" , "Token de acesso inválido." , "Favor verificar seu Token, sua validade pode ter expirado.");
+			exception.setInfoFault("GW00", "Token Inválido" , "Token de acesso inválido." , "Favor verificar seu Token, sua validade pode ter expirado.");
 			throw exception;
 		}
 		
