@@ -17,17 +17,18 @@ import br.com.gwpay.pagamento.model.HistoricoTransacao;
 
 public class HistoricoTransacaoDao {
 	
-	public Connection conn;
 	
 	public  HistoricoTransacaoDao(){
-		ConnectionFactory connectionFactory = new ConnectionFactory();
-		conn = connectionFactory.getConnection();
+		
 	}
 	
 	public boolean inserirHistoricoTransacao(HistoricoTransacao transacao){
 		
 		try {
-				
+			
+			ConnectionFactory connectionFactory = new ConnectionFactory();
+			Connection conn = connectionFactory.getConnection();
+			
 				System.out.println("after getconn");
 				PreparedStatement pstmt;
 				
@@ -118,6 +119,8 @@ public class HistoricoTransacaoDao {
 	public HashMap getBandeiraTransacao(String codNSU){
 	
 		try {
+			ConnectionFactory connectionFactory = new ConnectionFactory();
+			Connection conn = connectionFactory.getConnection();
 			
 			System.out.println("after getconn");
 			PreparedStatement pstmt;
@@ -160,6 +163,8 @@ public class HistoricoTransacaoDao {
 	public HashMap getBandeiraTransacaoOriginal(String codNSUTransacaoOriginal){
 		
 		try {
+			ConnectionFactory connectionFactory = new ConnectionFactory();
+			Connection conn = connectionFactory.getConnection();
 			
 			System.out.println("after getconn");
 			PreparedStatement pstmt;
@@ -203,6 +208,8 @@ public class HistoricoTransacaoDao {
 	public Timestamp getDataTransacao(String codNSU){
 		
 		try {
+			ConnectionFactory connectionFactory = new ConnectionFactory();
+			Connection conn = connectionFactory.getConnection();
 			
 			System.out.println("after getconn");
 			PreparedStatement pstmt;

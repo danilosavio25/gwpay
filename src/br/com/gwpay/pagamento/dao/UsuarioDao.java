@@ -13,11 +13,8 @@ import javax.sql.DataSource;
 
 public class UsuarioDao {
 	
-	public Connection conn;
 	
 	public UsuarioDao() {
-		ConnectionFactory connectionFactory = new ConnectionFactory();
-		conn = connectionFactory.getConnection();
 	}
 
 	
@@ -25,6 +22,8 @@ public class UsuarioDao {
 		
 		try {
 			
+			ConnectionFactory connectionFactory = new ConnectionFactory();
+			Connection conn = connectionFactory.getConnection();
 			System.out.println("after getconn");
 			PreparedStatement pstmt;
 			

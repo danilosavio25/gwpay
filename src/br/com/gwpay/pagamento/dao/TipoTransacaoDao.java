@@ -13,17 +13,16 @@ import javax.sql.DataSource;
 
 public class TipoTransacaoDao {
 	
-	public Connection conn;
 	
 	public TipoTransacaoDao() {
-		ConnectionFactory connectionFactory = new ConnectionFactory();
-		conn = connectionFactory.getConnection();
 	}
 	
 	public int getTipoTransacaoId(String descricao){
 		
 		try {
 			
+			ConnectionFactory connectionFactory = new ConnectionFactory();
+			Connection conn = connectionFactory.getConnection();
 			System.out.println("after getconn");
 			PreparedStatement pstmt;
 			

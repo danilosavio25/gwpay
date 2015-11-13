@@ -15,17 +15,16 @@ import br.com.gwpay.pagamento.model.HistoricoTransacaoErro;
 
 public class HistoricoTransacaoErroDao {
 	
-	public Connection conn;
 	
 	public  HistoricoTransacaoErroDao(){
-		ConnectionFactory connectionFactory = new ConnectionFactory();
-		conn = connectionFactory.getConnection();
 	}
 	
 	public boolean inserirHistoricoTransacaoErro(HistoricoTransacaoErro transacao){
 		
 		try {
-				
+			
+				ConnectionFactory connectionFactory = new ConnectionFactory();
+				Connection conn = connectionFactory.getConnection();
 				System.out.println("after getconn");
 				PreparedStatement pstmt;
 				

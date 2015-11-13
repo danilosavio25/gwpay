@@ -24,7 +24,7 @@ public class DaoTest {
 		ConnectionFactory connectionFactory = new ConnectionFactory();
 		assertNotNull(connectionFactory.getConnection());
 		
-		BandeiraDao bDao = new BandeiraDao();
+		/*BandeiraDao bDao = new BandeiraDao();
 		assertNotNull(bDao.conn);
 		
 		ClienteDao cDao = new ClienteDao();
@@ -52,7 +52,7 @@ public class DaoTest {
 		assertNotNull(ttDao.conn);
 		
 		UsuarioDao uDao = new UsuarioDao();
-		assertNotNull(uDao.conn);
+		assertNotNull(uDao.conn);*/
 	}
 	
 	

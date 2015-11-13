@@ -19,13 +19,14 @@ public class SessaoDao {
 	public Connection conn;
 	
 	public  SessaoDao(){
-		ConnectionFactory connectionFactory = new ConnectionFactory();
-		conn = connectionFactory.getConnection();
 	}
 	
 	public boolean inserirSessao(Sessao sessao){
 		
 		try {
+			
+				ConnectionFactory connectionFactory = new ConnectionFactory();
+				Connection conn = connectionFactory.getConnection();
 				System.out.println("after getconn");
 				PreparedStatement pstmt;
 				
@@ -56,7 +57,8 @@ public class SessaoDao {
 	public int autenticar(String token){
 		
 		try {
-			
+			ConnectionFactory connectionFactory = new ConnectionFactory();
+			Connection conn = connectionFactory.getConnection();
 			System.out.println("after getconn");
 			PreparedStatement pstmt;
 			
@@ -92,6 +94,9 @@ public class SessaoDao {
 	public Sessao getSessao(String token){
 		
 		try {
+			
+			ConnectionFactory connectionFactory = new ConnectionFactory();
+			Connection conn = connectionFactory.getConnection();
 			
 			System.out.println("after getconn");
 			PreparedStatement pstmt;
@@ -132,7 +137,8 @@ public class SessaoDao {
 	public boolean deletarSessao(String token){
 		
 		try {
-			
+			ConnectionFactory connectionFactory = new ConnectionFactory();
+			Connection conn = connectionFactory.getConnection();
 			System.out.println("after getconn");
 			PreparedStatement pstmt;
 			

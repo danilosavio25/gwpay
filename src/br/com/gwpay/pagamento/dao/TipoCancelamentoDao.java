@@ -13,17 +13,15 @@ import javax.sql.DataSource;
 
 public class TipoCancelamentoDao {
 	
-	public Connection conn;
-	
 	public  TipoCancelamentoDao(){
-		ConnectionFactory connectionFactory = new ConnectionFactory();
-		conn = connectionFactory.getConnection();
 	}
 
 	public int getTipoCancelamentoId(String descricao){
 		
 		try {
 			
+			ConnectionFactory connectionFactory = new ConnectionFactory();
+			Connection conn = connectionFactory.getConnection();
 			System.out.println("after getconn");
 			PreparedStatement pstmt;
 			

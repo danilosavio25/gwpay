@@ -13,11 +13,8 @@ import javax.sql.DataSource;
 
 public class ErroAdquirenteDao {
 	
-	public Connection conn;
 	
 	public  ErroAdquirenteDao(){
-		ConnectionFactory connectionFactory = new ConnectionFactory();
-		conn = connectionFactory.getConnection();
 	}
 
 
@@ -25,7 +22,8 @@ public class ErroAdquirenteDao {
 	public HashMap getDadosErro(String codErro, String adquirente){
 		
 		try {
-			
+			ConnectionFactory connectionFactory = new ConnectionFactory();
+			Connection conn = connectionFactory.getConnection();
 			System.out.println("after getconn");
 			PreparedStatement pstmt;
 			

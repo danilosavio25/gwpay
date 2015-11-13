@@ -11,11 +11,8 @@ import javax.sql.DataSource;
 
 public class BandeiraDao {
 	
-	public Connection conn;
 	
 	public BandeiraDao() {
-		ConnectionFactory connectionFactory = new ConnectionFactory();
-		conn = connectionFactory.getConnection();
 	}
 
 	
@@ -23,6 +20,8 @@ public class BandeiraDao {
 		
 		try {
 			
+			ConnectionFactory connectionFactory = new ConnectionFactory();
+			Connection conn = connectionFactory.getConnection();
 			System.out.println("after getconn");
 			PreparedStatement pstmt;
 			
