@@ -4,7 +4,8 @@ import java.net.URL;
 import java.util.HashMap;
 
 import javax.servlet.ServletContext;
-import javax.ws.rs.core.Application;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 
 import com.aciworldwide.commerce.gateway.plugins.UniversalPlugin;
 
@@ -12,7 +13,8 @@ import br.com.gwpay.pagamento.model.Parametros;
 import br.com.gwpay.pagamento.model.ParametrosAutenticacao;
 import br.com.gwpay.pagamento.model.ParametrosAutorizacao;
 
-public class MPIPlugin {
+public class MPIPlugin extends HttpServlet{
+	
 	
 	public static void main(String[] args) {
 		/*MPIPlugin m = new MPIPlugin();
@@ -38,6 +40,17 @@ public class MPIPlugin {
 		params.setNumParcelas(1);
 		
 		m.realizarCreditoCompleto(params);*/
+		
+		MPIPlugin m = new MPIPlugin();
+		System.out.println(m.getPath());
+		
+		ParametrosAutorizacao params = new ParametrosAutorizacao();
+		params.setCodCliente("D087729101");
+		params.setCodNSU("463730071653131");
+		params.setValor(200);
+		params.setCodRastreio("000000011");
+		
+		m.realizarConsultaTransacao(params);
 	}
 	
 	public HashMap realizarConsultaTransacao(Parametros params){
@@ -175,7 +188,7 @@ public class MPIPlugin {
 	public HashMap realizarCreditoAutorizacao(ParametrosAutorizacao params){
 	
 		String path = getPath();
-		
+		System.out.println(path);
 		UniversalPlugin plugin = new UniversalPlugin();
 		plugin.setResourcePath(path);
 		
@@ -438,14 +451,30 @@ public class MPIPlugin {
 	}
 	
 	public String getPath(){
-		URL url = getClass().getResource("");
-		String sUrl = "";
-		System.out.println("url " + url);
+	/*	MPIPlugin mpi = new MPIPlugin();
+		ServletContext context = mpi.getServletContext();
+		String fullPath = context.getRealPath("/WEB-INF/resource.cgn");
+		System.out.println("fullPath " + fullPath);*/
+		//System.out.println("url " + url);
 		
-		String path = System.getProperty("jboss.home.dir");
-		sUrl = path + "\\standalone\\deployments\\pagamentows.war\\WEB-INF\\classes\\br\\com\\gwpay\\pagamento\\plugin";
-		System.out.println("path:" +  sUrl);
+		//System.out.println(System.getProperty("jboss.server.base.dir"));
+	//	String sUrl = System.getProperty("jboss.server.base.dir") + "\\deployments";
 		
+		/*String path = System.getProperty("jboss.home.dir");
+	//	sUrl = path + "\\standalone\\deployments\\pagamentows.war\\WEB-INF\\classes\\br\\com\\gwpay\\pagamento\\plugin";
+
+		sUrl = path + "/standalone/deployments/pagamentows.war/WEB-INF/classes/br/com/gwpay/pagamento/plugin/";
+		if(sUrl.contains("resource.cgn")){
+			sUrl = sUrl.replace("resource.cgn", "");
+		}
+		System.out.println(path);*/
+	//	URL url = this.getClass().getResource("");
+		//String sUrl = url.getPath();
+		
+		
+		String sUrl = "\\resourceGetNet";
+		
+		System.out.println("sUrl:" +  sUrl);
 		return sUrl;
 	}
 	

@@ -16,55 +16,16 @@ import br.com.gwpay.pagamento.model.Sessao;
 
 public class SessaoDao {
 	
-	DataSource ds = null;
-	InitialContext ic = null;
+	public Connection conn;
 	
-	
-	public Connection getConnection(){
-		
-
-		Connection connection = null;
-
-		try {
-			System.out.println("Conectando com DataSource");
-			 ic = new InitialContext();  
-			 ds = (DataSource) ic.lookup("java:jboss/datasources/PostgreSQLDS");  
-			 connection = ds.getConnection();
-
-			 
-			/* 
-			 String url = "jdbc:postgresql://localhost:5432/GWPayBD";  
-			 String usuario = "GWPayAdminBD";  
-			 String senha = "GWPayAdminBD00";
-			 
-			 Class.forName("org.postgresql.Driver").newInstance();  
-		      connection = DriverManager.getConnection(url, usuario, senha); 
-			 */
-			 
-		} catch (Exception e) {
-
-			System.out.println("Connection Failed! Check output console");
-			e.printStackTrace();
-			return null;
-		}
-
-		if (connection != null) {
-			System.out.println("Conectado com sucesso!");
-			return connection;
-		} else {
-			System.out.println("Conexao FAlhou!");
-			return null;
-
-		}
-
-		
+	public  SessaoDao(){
+		ConnectionFactory connectionFactory = new ConnectionFactory();
+		conn = connectionFactory.getConnection();
 	}
-	
 	
 	public boolean inserirSessao(Sessao sessao){
 		
 		try {
-				Connection conn = getConnection();
 				System.out.println("after getconn");
 				PreparedStatement pstmt;
 				
@@ -96,7 +57,6 @@ public class SessaoDao {
 		
 		try {
 			
-			Connection conn = getConnection();
 			System.out.println("after getconn");
 			PreparedStatement pstmt;
 			
@@ -133,7 +93,6 @@ public class SessaoDao {
 		
 		try {
 			
-			Connection conn = getConnection();
 			System.out.println("after getconn");
 			PreparedStatement pstmt;
 			
@@ -174,7 +133,6 @@ public class SessaoDao {
 		
 		try {
 			
-			Connection conn = getConnection();
 			System.out.println("after getconn");
 			PreparedStatement pstmt;
 			

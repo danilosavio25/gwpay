@@ -424,8 +424,8 @@ public class GetNetService implements IPagamentoWS{
 			
 			if (!camposRetornoTerminal.containsKey("sufixo")) {
 				//@EXCEPTION CRIAR CÓDIGO
-				GWPayException exception = new GWPayException("Parâmetro Incorreto.");
-				exception.setInfoFault("GW01", "Parâmetro incorreto." , "Paramêtro bandeira incorreto." , "Favor verificar parametro");
+				GWPayException exception = new GWPayException("NSU Incorreto.");
+				exception.setInfoFault("GW01", "CodNSU não encontrado." , "Nenhuma transação foi encontrada na base de dados para esse codNSU." , "Favor verificar codNSU");
 				throw exception;
 			}
 			

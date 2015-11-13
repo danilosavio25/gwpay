@@ -17,5 +17,6 @@
 	<classpathentry kind="lib" path="C:/Workspaces/Libs/plugin.jar"/>
 	<classpathentry kind="lib" path="C:/Workspaces/Libs/postgresql-9.4-1202.jdbc4.jar"/>
 	<classpathentry kind="lib" path="C:/Workspaces/Libs/commons-net-3.3.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
