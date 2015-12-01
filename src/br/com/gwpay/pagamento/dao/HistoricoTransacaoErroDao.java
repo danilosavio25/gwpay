@@ -35,14 +35,14 @@ public class HistoricoTransacaoErroDao {
 						+"														nsu_id, dat_trs, trs_original_id, dsc_resposta, cod_resposta,          	"
 						+"														cod_erro_gwy, dsc_erro_gwy, val_primeira_pcl, val_outras_pcl,val_total,	"
 						+"														taxa_juros, juros_ins_fin, cod_erro_ws, dsc_erro_ws,valor_cancelado,   	"
-						+"														tip_trs_id, cliente_id, bandeira_id, tip_cancelamento_id, cod_seguranca_cartao)              	"
+						+"														tip_trs_id, cliente_id, bandeira_id, tip_cancelamento_id, cod_seguranca_cartao, adq_id)              	"
 						+"					    VALUES (?, ?, ?, ?, ?,                                                                           	"
 						+"						    	?, ?, ?, ?, ?,                                                                               	"
 						+"						   	    ?, ?, ?, ?, ?,                                                                                	"
 						+"						   	    ?, current_timestamp, ?,?,?,                                                                 	"
 						+"						   	    ?, ?, ?, ?, ?,                                                                             	"
 						+"						   	    ?, ?, ?, ?, ?,                                                                             	"
-						+"						    	?, ?, ?, ?,?);                                                                                    	";
+						+"						    	?, ?, ?, ?,?, ?);                                                                                    	";
 	
 				
 				pstmt = conn.prepareStatement(sql);
@@ -94,7 +94,7 @@ public class HistoricoTransacaoErroDao {
 				pstmt.setInt(32, transacao.getBandeiraId());
 				pstmt.setInt(33, transacao.getTipoCancelamentoId());
 				pstmt.setString(34, transacao.getCodSegurancaCartao());
-
+				pstmt.setInt(35, transacao.getAdquirenteId());
 	
 				
 				pstmt.executeUpdate();
@@ -104,7 +104,11 @@ public class HistoricoTransacaoErroDao {
 				
 				return true;
 			} catch (SQLException e) {
+				System.out.println("SQLException");
 				e.printStackTrace();
+				
+				
+				
 				return false;
 			}
 		

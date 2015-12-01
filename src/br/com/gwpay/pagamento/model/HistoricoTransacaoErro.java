@@ -39,7 +39,7 @@ public class HistoricoTransacaoErro {
 	private int bandeiraId;
 	private int tipoCancelamentoId;
 	private String codSegurancaCartao;
-	
+	private int adquirenteId;
 
 	public String getCodCliente() {
 		return codCliente;
@@ -250,6 +250,12 @@ public class HistoricoTransacaoErro {
 	}
 	public void setCodSegurancaCartao(String codSegurancaCartao) {
 		this.codSegurancaCartao = codSegurancaCartao;
+	}
+	public int getAdquirenteId() {
+		return adquirenteId;
+	}
+	public void setAdquirenteId(int adquirenteId) {
+		this.adquirenteId = adquirenteId;
 	}
 	
 	

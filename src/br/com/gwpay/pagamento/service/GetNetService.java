@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
+import br.com.gwpay.pagamento.dao.AdquirenteDao;
 import br.com.gwpay.pagamento.dao.BandeiraDao;
 import br.com.gwpay.pagamento.dao.ClienteDao;
 import br.com.gwpay.pagamento.dao.ErroAdquirenteDao;
@@ -42,6 +43,7 @@ public class GetNetService implements IPagamentoWS{
 			HashMap<String, String> camposRetorno = new HashMap<>();
 			int tipoTransacaoId = 0;
 			int clienteId = 0;
+			int adquirenteId = 0;
 			
 			//### TRY TRATA AS EXCECOES SQL E DE ERRO DE CONEXAO DO PLUGIN ###
 			try {
@@ -61,6 +63,10 @@ public class GetNetService implements IPagamentoWS{
 				// ### Busca o ID do cliente no banco de dados ####	
 				ClienteDao cDao = new ClienteDao();
 				clienteId = cDao.getClienteId(params.getCodGWPay());
+				
+				// ### Busca o ID do adquirente no banco de dados ####	
+				AdquirenteDao aDao = new AdquirenteDao();
+				adquirenteId = aDao.getAdquirenteId("GETNET");
 				
 				// ### VERIFICACOES DE SEGURANCA ###
 				if(clienteId == 0){
@@ -95,7 +101,7 @@ public class GetNetService implements IPagamentoWS{
 				
 			//############################################ HISTORICO ############################################################	
 				//### SALVA TRANSACAO NO BANCO DE DADOS ###
-				HistoricoTransacao transacao = gerarHistoricoAutorizacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId);
+				HistoricoTransacao transacao = gerarHistoricoAutorizacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId, adquirenteId);
 				
 				HistoricoTransacaoDao dao = new HistoricoTransacaoDao();
 				dao.inserirHistoricoTransacao(transacao);	
@@ -105,7 +111,7 @@ public class GetNetService implements IPagamentoWS{
 			}catch (GWPayException e) {
 				
 				// ##### Salva histórico de erros ########
-				HistoricoTransacaoErro transacao = gerarHistoricoErroAutorizacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId);
+				HistoricoTransacaoErro transacao = gerarHistoricoErroAutorizacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId,  adquirenteId);
 				transacao.setCodErroGateway(e.getFaultInfo().getCodigoErro());
 				transacao.setDescricaoErroGateway(e.getFaultInfo().getDescricaoErro());
 				HistoricoTransacaoErroDao eDao =  new HistoricoTransacaoErroDao();
@@ -115,7 +121,7 @@ public class GetNetService implements IPagamentoWS{
 			}catch (AdquirenteException e) {
 				
 				// ##### Salva histórico de erros ########
-				HistoricoTransacaoErro transacao = gerarHistoricoErroAutorizacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId);
+				HistoricoTransacaoErro transacao = gerarHistoricoErroAutorizacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId , adquirenteId);
 				HistoricoTransacaoErroDao eDao =  new HistoricoTransacaoErroDao();
 				eDao.inserirHistoricoTransacaoErro(transacao);
 				
@@ -128,7 +134,7 @@ public class GetNetService implements IPagamentoWS{
 				exception.setInfoFault("GW00", "Erro de conexão" , "Ocorreu um erro de conexão no sistema GWPay." , "Caso o erro persista, favor entrar em contato com a GWPay");
 				
 				// ##### Salva histórico de erros ########
-				HistoricoTransacaoErro transacao = gerarHistoricoErroAutorizacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId);
+				HistoricoTransacaoErro transacao = gerarHistoricoErroAutorizacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId, adquirenteId);
 				transacao.setCodErroGateway(exception.getFaultInfo().getCodigoErro());
 				transacao.setDescricaoErroGateway(exception.getFaultInfo().getDescricaoErro());
 				HistoricoTransacaoErroDao eDao =  new HistoricoTransacaoErroDao();
@@ -154,7 +160,7 @@ public class GetNetService implements IPagamentoWS{
 		HashMap<String, String> camposRetorno = new HashMap<>();
 		int tipoTransacaoId = 0;
 		int clienteId = 0;
-		
+		int adquirenteId = 0;
 		//### TRY TRATA AS EXCECOES SQL E DE ERRO DE CONEXAO DO PLUGIN ###
 		try {
 			
@@ -173,6 +179,10 @@ public class GetNetService implements IPagamentoWS{
 			// ### Busca o ID do cliente no banco de dados ####	
 			ClienteDao cDao = new ClienteDao();
 			clienteId = cDao.getClienteId(params.getCodGWPay());
+			
+			// ### Busca o ID do adquirente no banco de dados ####	
+			AdquirenteDao aDao = new AdquirenteDao();
+			adquirenteId = aDao.getAdquirenteId("GETNET");
 			
 			// ### VERIFICACOES DE SEGURANCA ###
 			if(clienteId == 0){
@@ -208,7 +218,7 @@ public class GetNetService implements IPagamentoWS{
 		//############################################ HISTORICO ############################################################	
 			
 			//### SALVA TRANSACAO NO BANCO DE DADOS ###
-			HistoricoTransacao transacao = gerarHistoricoAutorizacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId);
+			HistoricoTransacao transacao = gerarHistoricoAutorizacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId, adquirenteId);
 			
 			HistoricoTransacaoDao dao = new HistoricoTransacaoDao();
 			dao.inserirHistoricoTransacao(transacao);	
@@ -216,9 +226,9 @@ public class GetNetService implements IPagamentoWS{
 			return result;
 		
 		}catch (GWPayException e) {
-			
+			System.out.println("GWPayException a");
 			// ##### Salva histórico de erros ########
-			HistoricoTransacaoErro transacao = gerarHistoricoErroAutorizacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId);
+			HistoricoTransacaoErro transacao = gerarHistoricoErroAutorizacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId, adquirenteId);
 			transacao.setCodErroGateway(e.getFaultInfo().getCodigoErro());
 			transacao.setDescricaoErroGateway(e.getFaultInfo().getDescricaoErro());
 			HistoricoTransacaoErroDao eDao =  new HistoricoTransacaoErroDao();
@@ -226,9 +236,9 @@ public class GetNetService implements IPagamentoWS{
 			
 			throw e;
 		}catch (AdquirenteException e) {
-			
+			System.out.println("GWPayException b");
 			// ##### Salva histórico de erros ########
-			HistoricoTransacaoErro transacao = gerarHistoricoErroAutorizacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId);
+			HistoricoTransacaoErro transacao = gerarHistoricoErroAutorizacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId, adquirenteId);
 			HistoricoTransacaoErroDao eDao =  new HistoricoTransacaoErroDao();
 			eDao.inserirHistoricoTransacaoErro(transacao);
 			
@@ -241,7 +251,7 @@ public class GetNetService implements IPagamentoWS{
 			exception.setInfoFault("GW00", "Erro de conexão" , "Ocorreu um erro de conexão no sistema GWPay." , "Caso o erro persista, favor entrar em contato com a GWPay");
 			
 			// ##### Salva histórico de erros ########
-			HistoricoTransacaoErro transacao = gerarHistoricoErroAutorizacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId);
+			HistoricoTransacaoErro transacao = gerarHistoricoErroAutorizacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId, adquirenteId);
 			transacao.setCodErroGateway(exception.getFaultInfo().getCodigoErro());
 			transacao.setDescricaoErroGateway(exception.getFaultInfo().getDescricaoErro());
 			HistoricoTransacaoErroDao eDao =  new HistoricoTransacaoErroDao();
@@ -269,6 +279,7 @@ public class GetNetService implements IPagamentoWS{
 		HashMap<String, String> camposRetornoBandeira = new HashMap<>();
 		int tipoTransacaoId = 0;
 		int clienteId = 0;
+		int adquirenteId = 0;
 		
 		//### TRY TRATA AS EXCECOES SQL E DE ERRO DE CONEXAO DO PLUGIN ###
 		try {
@@ -295,6 +306,10 @@ public class GetNetService implements IPagamentoWS{
 			// ### Busca o ID do cliente no banco de dados ####	
 			ClienteDao cDao = new ClienteDao();
 			clienteId = cDao.getClienteId(params.getCodGWPay());
+			
+			// ### Busca o ID do adquirente no banco de dados ####	
+			AdquirenteDao aDao = new AdquirenteDao();
+			adquirenteId = aDao.getAdquirenteId("GETNET");
 			
 			// ### VERIFICACOES DE SEGURANCA ###
 			if(clienteId == 0){
@@ -328,7 +343,7 @@ public class GetNetService implements IPagamentoWS{
 		//############################################ HISTORICO ############################################################	
 			
 			//### SALVA TRANSACAO NO BANCO DE DADOS ###
-			HistoricoTransacao transacao = gerarHistoricoConfirmacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId);
+			HistoricoTransacao transacao = gerarHistoricoConfirmacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId, adquirenteId);
 			
 			HistoricoTransacaoDao dao = new HistoricoTransacaoDao();
 			dao.inserirHistoricoTransacao(transacao);
@@ -337,7 +352,7 @@ public class GetNetService implements IPagamentoWS{
 		}catch (GWPayException e) {
 			
 			// ##### Salva histórico de erros ########
-			HistoricoTransacaoErro transacao = gerarHistoricoErroConfirmacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId);
+			HistoricoTransacaoErro transacao = gerarHistoricoErroConfirmacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId, adquirenteId);
 			transacao.setCodErroGateway(e.getFaultInfo().getCodigoErro());
 			transacao.setDescricaoErroGateway(e.getFaultInfo().getDescricaoErro());
 			HistoricoTransacaoErroDao eDao =  new HistoricoTransacaoErroDao();
@@ -347,7 +362,7 @@ public class GetNetService implements IPagamentoWS{
 		}catch (AdquirenteException e) {
 			
 			// ##### Salva histórico de erros ########
-			HistoricoTransacaoErro transacao = gerarHistoricoErroConfirmacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId);
+			HistoricoTransacaoErro transacao = gerarHistoricoErroConfirmacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId, adquirenteId);
 			HistoricoTransacaoErroDao eDao =  new HistoricoTransacaoErroDao();
 			eDao.inserirHistoricoTransacaoErro(transacao);
 			
@@ -360,7 +375,7 @@ public class GetNetService implements IPagamentoWS{
 			exception.setInfoFault("GW00", "Erro de conexão" , "Ocorreu um erro de conexão no sistema GWPay." , "Caso o erro persista, favor entrar em contato com a GWPay");
 			
 			// ##### Salva histórico de erros ########
-			HistoricoTransacaoErro transacao = gerarHistoricoErroConfirmacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId);
+			HistoricoTransacaoErro transacao = gerarHistoricoErroConfirmacao(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId, adquirenteId);
 			transacao.setCodErroGateway(exception.getFaultInfo().getCodigoErro());
 			transacao.setDescricaoErroGateway(exception.getFaultInfo().getDescricaoErro());
 			HistoricoTransacaoErroDao eDao =  new HistoricoTransacaoErroDao();
@@ -388,7 +403,7 @@ public class GetNetService implements IPagamentoWS{
 			(params.getCodNSU().equals("") || params.getCodNSU() == null)){
 			
 			GWPayException exception = new GWPayException("Parâmetros Obrigatórios.");
-			exception.setInfoFault("GW00", "Parâmetro faltando." , "Há um ou mais Parâmetros obrigatórios faltando." , "Favor verificar os parâmetros");
+			exception.setInfoFault("GW00", "Parâmetros obrigatórios." , "Há um ou mais Parâmetros obrigatórios faltando." , "Favor verificar os parâmetros");
 			throw exception;
 			
 		}
@@ -508,7 +523,7 @@ public class GetNetService implements IPagamentoWS{
 			int tipoTransacaoId = 0;
 			int clienteId = 0;
 			int cancelamentoId = 0;
-			
+			int adquirenteId = 0;
 			//### TRY TRATA AS EXCECOES SQL E DE ERRO DE CONEXAO DO PLUGIN ###
 			try {
 				HistoricoTransacaoDao hDao = new HistoricoTransacaoDao();
@@ -537,6 +552,10 @@ public class GetNetService implements IPagamentoWS{
 				// ### Busca o ID do cliente no banco de dados ####	
 				ClienteDao cDao = new ClienteDao();
 				clienteId = cDao.getClienteId(params.getCodGWPay());
+				
+				// ### Busca o ID do adquirente no banco de dados ####	
+				AdquirenteDao aDao = new AdquirenteDao();
+				adquirenteId = aDao.getAdquirenteId("GETNET");
 				
 				// ### VERIFICACOES DE SEGURANCA ###
 				if(clienteId == 0){
@@ -570,7 +589,7 @@ public class GetNetService implements IPagamentoWS{
 			//############################################ HISTORICO ############################################################	
 				
 				//### SALVA TRANSACAO NO BANCO DE DADOS ###
-				HistoricoTransacao transacao = gerarHistoricoCancelamento(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId, cancelamentoId);
+				HistoricoTransacao transacao = gerarHistoricoCancelamento(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId, cancelamentoId, adquirenteId);
 				
 				HistoricoTransacaoDao dao = new HistoricoTransacaoDao();
 				dao.inserirHistoricoTransacao(transacao);
@@ -579,7 +598,7 @@ public class GetNetService implements IPagamentoWS{
 			}catch (GWPayException e) {
 				
 				// ##### Salva histórico de erros ########
-				HistoricoTransacaoErro transacao = gerarHistoricoErroCancelamento(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId);
+				HistoricoTransacaoErro transacao = gerarHistoricoErroCancelamento(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId, adquirenteId);
 				transacao.setCodErroGateway(e.getFaultInfo().getCodigoErro());
 				transacao.setDescricaoErroGateway(e.getFaultInfo().getDescricaoErro());
 				HistoricoTransacaoErroDao eDao =  new HistoricoTransacaoErroDao();
@@ -589,7 +608,7 @@ public class GetNetService implements IPagamentoWS{
 			}catch (AdquirenteException e) {
 				
 				// ##### Salva histórico de erros ########
-				HistoricoTransacaoErro transacao = gerarHistoricoErroCancelamento(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId);
+				HistoricoTransacaoErro transacao = gerarHistoricoErroCancelamento(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId, adquirenteId);
 				HistoricoTransacaoErroDao eDao =  new HistoricoTransacaoErroDao();
 				eDao.inserirHistoricoTransacaoErro(transacao);
 				
@@ -602,7 +621,7 @@ public class GetNetService implements IPagamentoWS{
 				exception.setInfoFault("GW00", "Erro de conexão" , "Ocorreu um erro de conexão no sistema GWPay." , "Caso o erro persista, favor entrar em contato com a GWPay");
 				
 				// ##### Salva histórico de erros ########
-				HistoricoTransacaoErro transacao = gerarHistoricoErroCancelamento(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId);
+				HistoricoTransacaoErro transacao = gerarHistoricoErroCancelamento(params, terminalIdComposto, camposRetorno, tipoTransacaoId, clienteId, bandeiraId, adquirenteId);
 				transacao.setCodErroGateway(exception.getFaultInfo().getCodigoErro());
 				transacao.setDescricaoErroGateway(exception.getFaultInfo().getDescricaoErro());
 				HistoricoTransacaoErroDao eDao =  new HistoricoTransacaoErroDao();
@@ -622,7 +641,7 @@ public class GetNetService implements IPagamentoWS{
 	
 	//####### MÉTODOS INTERNOS AUTORIZACAO ####################
 	
-	private HistoricoTransacao gerarHistoricoAutorizacao(ParametrosAutorizacao params,String terminalIdComposto, HashMap<String, String> camposRetorno, int tipoTransacaoId, int clienteId, int bandeiraId){
+	private HistoricoTransacao gerarHistoricoAutorizacao(ParametrosAutorizacao params,String terminalIdComposto, HashMap<String, String> camposRetorno, int tipoTransacaoId, int clienteId, int bandeiraId, int adquirenteId){
 		
 		HistoricoTransacao transacao = new HistoricoTransacao();
 		transacao.setCodCliente(terminalIdComposto);
@@ -631,7 +650,7 @@ public class GetNetService implements IPagamentoWS{
 		transacao.setMoeda("986");			
 		transacao.setTipoPagamento(params.getTipoParcelamento());
 		transacao.setNumParcelas(params.getNumParcelas());
-		transacao.setNumCartao(params.getNumCartao());
+		transacao.setNumCartao(mascararCartao(params.getNumCartao()));
 		transacao.setMesVencimentoCartao(params.getMesVencimento());
 		transacao.setAnoVencimentoCartao(params.getAnoVencimento());
 		transacao.setNomePortador(params.getNomePortador());
@@ -663,6 +682,7 @@ public class GetNetService implements IPagamentoWS{
 		transacao.setTipoTransacaoId(tipoTransacaoId);
 		transacao.setClienteId(clienteId);
 		transacao.setBandeiraId(bandeiraId);
+		transacao.setAdquirenteId(adquirenteId);
 		transacao.setCodSegurancaCartao(params.getCodSegurancaCartao());
 		
 		// ### Não é cancelamento tipo = 0 ###
@@ -682,16 +702,16 @@ public class GetNetService implements IPagamentoWS{
 				(params.getCodGWPay().equals("") || params.getCodGWPay() == null) ||	
 				(params.getValor() == 0) ||
 				(params.getBandeira().equals("") || params.getBandeira() == null) ||
-				(params.getNumCartao().equals("") || params.getNumCartao() == null) ||
+				(params.getNumCartao().equals("") || params.getNumCartao() == null || params.getNumCartao().length() != 16) ||
 				(params.getNomePortador().equals("") || params.getNomePortador() == null) ||
 				(params.getMesVencimento() == 0) ||
 				(params.getAnoVencimento() == 0) ||
 				(params.getCodSegurancaCartao().equals("") || params.getCodSegurancaCartao() == null)){
 				
 				GWPayException exception = new GWPayException("Parâmetros Obrigatórios.");
-				exception.setInfoFault("GW00", "Parâmetro faltando." , "Há um ou mais Parâmetros obrigatórios faltando." , "Favor verificar os parâmetros");
+				exception.setInfoFault("GW00", "Parâmetros obrigatórios." , "Há um ou mais Parâmetros obrigatórios faltando." , "Favor verificar os parâmetros");
 				// ##### Salva histórico de erros ########
-				HistoricoTransacaoErro transacao = gerarHistoricoErroAutorizacao(params, null, new HashMap(), 0, 0, 0);
+				HistoricoTransacaoErro transacao = gerarHistoricoErroAutorizacao(params, null, new HashMap(), 0, 0, 0, 0);
 				transacao.setCodNSU(params.getCodNSU());
 				transacao.setCodErroGateway(exception.getFaultInfo().getCodigoErro());
 				transacao.setDescricaoErroGateway(exception.getFaultInfo().getDescricaoErro());
@@ -740,7 +760,7 @@ public class GetNetService implements IPagamentoWS{
 		
 	}
 
-	private HistoricoTransacaoErro gerarHistoricoErroAutorizacao(ParametrosAutorizacao params,String terminalIdComposto, HashMap<String, String> camposRetorno, int tipoTransacaoId, int clienteId, int bandeiraId){
+	private HistoricoTransacaoErro gerarHistoricoErroAutorizacao(ParametrosAutorizacao params,String terminalIdComposto, HashMap<String, String> camposRetorno, int tipoTransacaoId, int clienteId, int bandeiraId, int adquirenteId){
 		
 		HistoricoTransacaoErro transacao = new HistoricoTransacaoErro();
 		transacao.setCodCliente(terminalIdComposto);
@@ -749,7 +769,7 @@ public class GetNetService implements IPagamentoWS{
 		transacao.setMoeda("986");			
 		transacao.setTipoPagamento(params.getTipoParcelamento());
 		transacao.setNumParcelas(params.getNumParcelas());
-		transacao.setNumCartao(params.getNumCartao());
+		transacao.setNumCartao(mascararCartao(params.getNumCartao()));
 		transacao.setMesVencimentoCartao(params.getMesVencimento());
 		transacao.setAnoVencimentoCartao(params.getAnoVencimento());
 		transacao.setNomePortador(params.getNomePortador());
@@ -777,6 +797,7 @@ public class GetNetService implements IPagamentoWS{
 		transacao.setTipoTransacaoId(tipoTransacaoId);
 		transacao.setClienteId(clienteId);
 		transacao.setBandeiraId(bandeiraId);
+		transacao.setAdquirenteId(adquirenteId);
 		transacao.setCodSegurancaCartao(params.getCodSegurancaCartao());
 		
 		// ### Não é cancelamento tipo = 0 ###
@@ -791,10 +812,21 @@ public class GetNetService implements IPagamentoWS{
 		
 	}
 
+	private String mascararCartao(String numCartao){
+		
+		if(numCartao == null || numCartao.equals("") || numCartao.length() != 16){
+			return "";
+		}
+		
+		String numMascarado = numCartao;
+		String parteAterada = numCartao.substring(6, 12);
+		numMascarado = numMascarado.replace(parteAterada, "******");
+		return numMascarado;
+	}
 	
 	//####### MÉTODOS INTERNOS CONFIRMACAO ####################
 	
-	private HistoricoTransacao gerarHistoricoConfirmacao(Parametros params,String terminalIdComposto, HashMap<String, String> camposRetorno, int tipoTransacaoId, int clienteId, int bandeiraId){
+	private HistoricoTransacao gerarHistoricoConfirmacao(Parametros params,String terminalIdComposto, HashMap<String, String> camposRetorno, int tipoTransacaoId, int clienteId, int bandeiraId, int adquirenteId){
 			
 			HistoricoTransacao transacao = new HistoricoTransacao();
 			transacao.setCodCliente(terminalIdComposto);
@@ -826,7 +858,7 @@ public class GetNetService implements IPagamentoWS{
 			transacao.setTipoTransacaoId(tipoTransacaoId);
 			transacao.setClienteId(clienteId);
 			transacao.setBandeiraId(bandeiraId);
-			
+			transacao.setAdquirenteId(adquirenteId);
 			// ### Não é cancelamento tipo = 0 ###
 			transacao.setTipoCancelamentoId(0);
 			
@@ -847,9 +879,9 @@ public class GetNetService implements IPagamentoWS{
 					(params.getValor() == 0)){
 					
 					GWPayException exception = new GWPayException("Parâmetros Obrigatórios.");
-					exception.setInfoFault("GW00", "Parâmetro faltando." , "Há um ou mais Parâmetros obrigatórios faltando." , "Favor verificar os parâmetros");
+					exception.setInfoFault("GW00", "Parâmetros obrigatórios." , "Há um ou mais Parâmetros obrigatórios faltando." , "Favor verificar os parâmetros");
 					// ##### Salva histórico de erros ########
-					HistoricoTransacaoErro transacao = gerarHistoricoErroConfirmacao(params, null, new HashMap(), 0, 0, 0);
+					HistoricoTransacaoErro transacao = gerarHistoricoErroConfirmacao(params, null, new HashMap(), 0, 0, 0, 0);
 					transacao.setCodNSU(params.getCodNSU());
 					transacao.setCodErroGateway(exception.getFaultInfo().getCodigoErro());
 					transacao.setDescricaoErroGateway(exception.getFaultInfo().getDescricaoErro());
@@ -895,7 +927,7 @@ public class GetNetService implements IPagamentoWS{
 			
 		}
 
-	private HistoricoTransacaoErro gerarHistoricoErroConfirmacao(Parametros params,String terminalIdComposto, HashMap<String, String> camposRetorno, int tipoTransacaoId, int clienteId, int bandeiraId){
+	private HistoricoTransacaoErro gerarHistoricoErroConfirmacao(Parametros params,String terminalIdComposto, HashMap<String, String> camposRetorno, int tipoTransacaoId, int clienteId, int bandeiraId, int adquirenteId){
 			
 			HistoricoTransacaoErro transacao = new HistoricoTransacaoErro();
 			transacao.setCodCliente(terminalIdComposto);
@@ -926,7 +958,7 @@ public class GetNetService implements IPagamentoWS{
 			transacao.setTipoTransacaoId(tipoTransacaoId);
 			transacao.setClienteId(clienteId);
 			transacao.setBandeiraId(bandeiraId);
-			
+			transacao.setAdquirenteId(adquirenteId);
 			// ### Não é cancelamento tipo = 0 ###
 			transacao.setTipoCancelamentoId(0);
 			
@@ -941,7 +973,7 @@ public class GetNetService implements IPagamentoWS{
 
 	//####### MÉTODOS INTERNOS CANCELAMENTO ####################
 	
-	private HistoricoTransacao gerarHistoricoCancelamento(Parametros params,String terminalIdComposto, HashMap<String, String> camposRetorno, int tipoTransacaoId, int clienteId, int bandeiraId, int cancelamentoId){
+	private HistoricoTransacao gerarHistoricoCancelamento(Parametros params,String terminalIdComposto, HashMap<String, String> camposRetorno, int tipoTransacaoId, int clienteId, int bandeiraId, int cancelamentoId, int adquirenteId){
 		
 		HistoricoTransacao transacao = new HistoricoTransacao();
 		transacao.setCodCliente(terminalIdComposto);
@@ -973,7 +1005,7 @@ public class GetNetService implements IPagamentoWS{
 		transacao.setTipoTransacaoId(tipoTransacaoId);
 		transacao.setClienteId(clienteId);
 		transacao.setBandeiraId(bandeiraId);
-		
+		transacao.setAdquirenteId(adquirenteId);
 		transacao.setTipoCancelamentoId(cancelamentoId);
 		
 		System.out.println("TRANSSSSIDDDD: " + transacao.getCodCliente());
@@ -993,9 +1025,9 @@ public class GetNetService implements IPagamentoWS{
 				(params.getValor() == 0)){
 				
 				GWPayException exception = new GWPayException("Parâmetros Obrigatórios.");
-				exception.setInfoFault("GW00", "Parâmetro faltando." , "Há um ou mais Parâmetros obrigatórios faltando." , "Favor verificar os parâmetros");
+				exception.setInfoFault("GW00", "Parâmetros obrigatórios." , "Há um ou mais Parâmetros obrigatórios faltando." , "Favor verificar os parâmetros");
 				// ##### Salva histórico de erros ########
-				HistoricoTransacaoErro transacao = gerarHistoricoErroCancelamento(params, null, new HashMap(), 0, 0, 0);
+				HistoricoTransacaoErro transacao = gerarHistoricoErroCancelamento(params, null, new HashMap(), 0, 0, 0 ,0);
 				transacao.setCodNSU(params.getCodNSU());
 				transacao.setCodErroGateway(exception.getFaultInfo().getCodigoErro());
 				transacao.setDescricaoErroGateway(exception.getFaultInfo().getDescricaoErro());
@@ -1041,7 +1073,7 @@ public class GetNetService implements IPagamentoWS{
 		
 	}
 
-	private HistoricoTransacaoErro gerarHistoricoErroCancelamento(Parametros params,String terminalIdComposto, HashMap<String, String> camposRetorno, int tipoTransacaoId, int clienteId, int bandeiraId){
+	private HistoricoTransacaoErro gerarHistoricoErroCancelamento(Parametros params,String terminalIdComposto, HashMap<String, String> camposRetorno, int tipoTransacaoId, int clienteId, int bandeiraId, int adquirenteId){
 		
 		HistoricoTransacaoErro transacao = new HistoricoTransacaoErro();
 		transacao.setCodCliente(terminalIdComposto);
@@ -1072,7 +1104,7 @@ public class GetNetService implements IPagamentoWS{
 		transacao.setTipoTransacaoId(tipoTransacaoId);
 		transacao.setClienteId(clienteId);
 		transacao.setBandeiraId(bandeiraId);
-		
+		transacao.setAdquirenteId(adquirenteId);
 		// ### Não é cancelamento tipo = 0 ###
 		transacao.setTipoCancelamentoId(0);
 		

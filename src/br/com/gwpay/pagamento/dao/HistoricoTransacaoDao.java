@@ -39,14 +39,14 @@ public class HistoricoTransacaoDao {
 						+"														nsu_id, dat_trs, trs_original_id, dsc_resposta, cod_resposta,          	"
 						+"														val_primeira_pcl, val_outras_pcl,val_total,	"
 						+"														taxa_juros, juros_ins_fin, valor_cancelado,   	"
-						+"														tip_trs_id, cliente_id, bandeira_id, tip_cancelamento_id, cod_seguranca_cartao)              	"
+						+"														tip_trs_id, cliente_id, bandeira_id, tip_cancelamento_id, cod_seguranca_cartao, adq_id)              	"
 						+"					    VALUES (?, ?, ?, ?, ?,                                                                           	"
 						+"						    	?, ?, ?, ?, ?,                                                                               	"
 						+"						   	    ?, ?, ?, ?, ?,                                                                                	"
 						+"						   	    ?, current_timestamp, ?,?,?,                                                                 	"
 						+"						   	     ?, ?, ?,                                                                             	"
 						+"						   	    ?, ?,  ?,                                                                             	"
-						+"						    	?, ?, ?, ?,?);                                                                                    	";
+						+"						    	?, ?, ?, ?,?, ?);                                                                                    	";
 	
 				
 				pstmt = conn.prepareStatement(sql);
@@ -94,7 +94,7 @@ public class HistoricoTransacaoDao {
 				pstmt.setInt(28, transacao.getBandeiraId());
 				pstmt.setInt(29, transacao.getTipoCancelamentoId());
 				pstmt.setString(30, transacao.getCodSegurancaCartao());
-
+				pstmt.setInt(31, transacao.getAdquirenteId());
 	
 				
 				pstmt.executeUpdate();
